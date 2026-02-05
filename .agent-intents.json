@@ -36,6 +36,12 @@
       "branch": "agent-1/fix/flaky-unit-tests",
       "description": "Investigate and fix 2 flaky unit tests in moves.test.ts",
       "timestamp": "2026-02-05T22:11:35Z"
+    },
+    {
+      "agent": "agent-1",
+      "branch": "agent-1/feature/death-rewards",
+      "description": "Implement death reward system - draw cards when killing outlaws/renegades",
+      "timestamp": "2026-02-05T22:14:11Z"
     }
   ]
 }
