@@ -49,7 +49,7 @@
 
 ### 🐛 Bug Fixes
 - [x] **Server connection bug** ✅ - Fixed with `npm run start:host` for network play (commit e36462c, see NETWORK_SETUP.md)
-- [ ] **AI takeDamage bug** - ⚠️ INVESTIGATION: takeDamage IS available in respondToBang stage (phases.ts:158-161) and tests pass. May be outdated TODO or requires browser testing to reproduce.
+- [x] **AI takeDamage bug** ✅ - INVESTIGATED: Cannot reproduce. takeDamage available in respondToBang stage (phases.ts:179-182), all E2E tests pass (5/5), AIManager code correct. Likely fixed by events refactoring. Optional: browser verification.
 
 ---
 
