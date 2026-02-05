@@ -1,0 +1,33 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-02-05T00:00:00Z",
+  "agents": {
+    "agent-1": {
+      "name": "Main Agent (Direct File Access)",
+      "status": "active",
+      "currentTask": "unknown",
+      "lockedFiles": []
+    },
+    "agent-2": {
+      "name": "Git Agent (This Agent)",
+      "status": "active",
+      "currentTask": "Setting up git and coordination system",
+      "lockedFiles": [
+        ".agent-coordination.json",
+        ".gitignore"
+      ]
+    }
+  },
+  "communication": {
+    "protocol": "file-based",
+    "instructions": "Update this file with your current task and lock files you're working on. Check before modifying files to avoid conflicts.",
+    "rules": [
+      "Always check 'lockedFiles' before modifying a file",
+      "Update your 'currentTask' when starting new work",
+      "Add files to your 'lockedFiles' array before editing",
+      "Remove files from 'lockedFiles' when done",
+      "Commit your work frequently to avoid conflicts"
+    ]
+  },
+  "notes": "This coordination file helps multiple agents work together safely. Each agent should update their status and lock files before working on them."
+}

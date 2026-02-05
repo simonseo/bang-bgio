@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:bang-cardgame.fandom.com)",
+      "WebFetch(domain:static.wikia.nocookie.net)",
+      "Bash(npm test:*)",
+      "Bash(npm start)"
+    ]
+  }
+}
