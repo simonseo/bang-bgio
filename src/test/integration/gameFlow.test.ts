@@ -97,7 +97,16 @@ describe('Game Flow Integration Tests', () => {
     let client: ReturnType<typeof Client>;
 
     beforeEach(() => {
-      client = Client({ game: BangGame, numPlayers: 4 });
+      client = Client({ game: BangGame, numPlayers: 4, playerID: '0' });
+
+      // Complete character selection phase by having each player select in turn
+      let state = client.getState();
+      while (state.ctx.phase === 'characterSelection') {
+        const currentPlayer = state.ctx.currentPlayer;
+        const choice = state.G.players[currentPlayer].characterChoices[0];
+        client.moves.selectCharacter(choice.id);
+        state = client.getState();
+      }
     });
 
     it('should start with sheriff as first player', () => {

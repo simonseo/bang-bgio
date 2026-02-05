@@ -1,4 +1,23 @@
 {
   "version": "1.0",
-  "intents": []
+  "intents": [
+    {
+      "agent": "agent-1",
+      "branch": "agent-1/bugfix/ai-takedamage",
+      "description": "Fix AI takeDamage bug - AI should accept damage automatically in respondToBang stage",
+      "timestamp": "2026-02-05T21:16:09Z"
+    },
+    {
+      "agent": "agent-1",
+      "branch": "agent-1/fix/integration-tests",
+      "description": "Fix integration test failures (React rendering issues)",
+      "timestamp": "2026-02-05T21:36:31Z"
+    },
+    {
+      "agent": "agent-1",
+      "branch": "agent-1/feature/character-selection-ui",
+      "description": "Implement character selection UI phase - show players 2 random characters to choose from",
+      "timestamp": "2026-02-05T21:42:53Z"
+    }
+  ]
 }

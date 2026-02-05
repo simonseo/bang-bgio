@@ -2,10 +2,31 @@
 
 import { BangGameState } from './setup';
 import { validateGameState, validatePlayer } from './utils/stateValidation';
+import { selectCharacter } from './moves';
 
 export const phases = {
-  play: {
+  characterSelection: {
     start: true,
+    turn: {
+      order: {
+        first: () => 0,
+        next: ({ ctx }: { ctx: any }) => (ctx.playOrderPos + 1) % ctx.numPlayers,
+      },
+    },
+    moves: {
+      selectCharacter,
+    },
+    endIf: ({ G }: { G: BangGameState }) => {
+      // End phase when all players have selected their characters
+      const allSelected = Object.values(G.players).every(
+        player => player.hasSelectedCharacter
+      );
+      return allSelected;
+    },
+    next: 'play',
+  },
+  play: {
+    start: false,
     turn: {
       order: {
         first: ({ G }: { G: BangGameState }) => {
