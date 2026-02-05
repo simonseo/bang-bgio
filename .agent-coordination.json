@@ -1,20 +1,37 @@
 {
   "version": "1.0",
-  "lastUpdated": "2026-02-05T00:00:00Z",
+  "lastUpdated": "2026-02-05T20:00:00Z",
   "agents": {
-    "agent-1": {
-      "name": "Main Agent (Direct File Access)",
+    "streamed-drifting-lerdorf": {
+      "sessionId": "484ed494-ae4d-45c9-87a6-2a6037a3a313",
+      "name": "Git Setup Agent",
       "status": "active",
-      "currentTask": "unknown",
-      "lockedFiles": []
+      "lastActive": "2026-02-05T20:05:00Z",
+      "currentTask": "Investigating server connection bug - cannot connect with npm start --host",
+      "completedTasks": [
+        "Git repository initialization",
+        "Agent coordination system setup"
+      ],
+      "lockedFiles": [
+        "server.cjs",
+        "package.json",
+        ".agent-coordination.json"
+      ]
     },
-    "agent-2": {
-      "name": "Git Agent (This Agent)",
+    "current-session": {
+      "sessionId": "b17a9500-1cc2-4080-86ec-a2ab5aae6a56",
+      "name": "Main Development Agent",
       "status": "active",
-      "currentTask": "Setting up git and coordination system",
+      "lastActive": "2026-02-05T20:06:00Z",
+      "currentTask": "Fixing E2E tests in fullGameScenario.test.tsx (4 failures) - in progress",
+      "completedTasks": [
+        "Events parameter refactoring (all move functions, phase hooks, stage moves)",
+        "Draw phase character abilities (Black Jack, Jesse Jones, Kit Carlson, Pedro Ramirez)",
+        "E2E test investigation and fixes"
+      ],
       "lockedFiles": [
         ".agent-coordination.json",
-        ".gitignore"
+        "src/test/e2e/fullGameScenario.test.tsx"
       ]
     }
   },
@@ -26,8 +43,15 @@
       "Update your 'currentTask' when starting new work",
       "Add files to your 'lockedFiles' array before editing",
       "Remove files from 'lockedFiles' when done",
+      "Set status to 'paused' when waiting for user input",
       "Commit your work frequently to avoid conflicts"
     ]
+  },
+  "projectStatus": {
+    "testsPassing": "222/237 (94%)",
+    "unitTests": "114/114 passing",
+    "characterAbilities": "16/16 complete",
+    "refactoringStatus": "Events parameter pattern: COMPLETE"
   },
   "notes": "This coordination file helps multiple agents work together safely. Each agent should update their status and lock files before working on them."
 }

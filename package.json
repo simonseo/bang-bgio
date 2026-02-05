@@ -4,10 +4,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:host": "vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "server": "node server.cjs",
     "start": "concurrently \"npm run dev\" \"npm run server\"",
+    "start:host": "concurrently \"npm run dev:host\" \"npm run server\"",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage"

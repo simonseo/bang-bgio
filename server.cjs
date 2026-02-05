@@ -34,23 +34,45 @@ const server = Server({
 
 const PORT = process.env.PORT || 8000;
 
-server.run(PORT, () => {
-  console.log('🤠 Bang! Multiplayer Server Running');
-  console.log('=====================================');
-  console.log(`📡 Server: http://localhost:${PORT}`);
-  console.log('');
-  console.log('⚠️  NOTE: This is a placeholder server.');
-  console.log('    Game logic runs on the client side.');
-  console.log('    For full multiplayer, the client needs to connect.');
-  console.log('');
-  console.log('🎮 Players can connect from:');
-  console.log('   - Same computer: http://localhost:3000');
-  console.log('   - Local network: http://[YOUR-IP]:3000');
-  console.log('');
-  console.log('💡 To find your IP:');
-  console.log('   - Windows: ipconfig');
-  console.log('   - Mac/Linux: ifconfig');
-  console.log('');
-  console.log('📱 Mobile players: Use the local network IP');
-  console.log('');
-});
+// Add error handling for port conflicts
+const startServer = async () => {
+  try {
+    await server.run(PORT, () => {
+      console.log('🤠 Bang! Multiplayer Server Running');
+      console.log('=====================================');
+      console.log(`📡 Server: http://localhost:${PORT}`);
+      console.log('');
+      console.log('⚠️  NOTE: This is a placeholder server.');
+      console.log('    Game logic runs on the client side.');
+      console.log('    For full multiplayer, the client needs to connect.');
+      console.log('');
+      console.log('🎮 Players can connect from:');
+      console.log('   - Same computer: http://localhost:3000');
+      console.log('   - Local network: http://[YOUR-IP]:3000');
+      console.log('');
+      console.log('💡 To find your IP:');
+      console.log('   - Windows: ipconfig');
+      console.log('   - Mac/Linux: ifconfig');
+      console.log('');
+      console.log('📱 Mobile players: Use the local network IP');
+      console.log('');
+    });
+  } catch (error) {
+    if (error.code === 'EADDRINUSE') {
+      console.error('❌ Error: Port', PORT, 'is already in use!');
+      console.error('');
+      console.error('💡 Solutions:');
+      console.error('   1. Kill the process using the port:');
+      console.error(`      lsof -ti:${PORT} | xargs kill -9`);
+      console.error('   2. Use a different port:');
+      console.error(`      PORT=8001 npm run server`);
+      console.error('');
+      process.exit(1);
+    } else {
+      console.error('❌ Server error:', error.message);
+      process.exit(1);
+    }
+  }
+};
+
+startServer();
