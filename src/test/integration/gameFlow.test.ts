@@ -6,6 +6,47 @@ import { Client } from 'boardgame.io/client';
 import { BangGame } from '../../Game';
 import type { BangGameState } from '../../game/setup';
 
+/**
+ * Helper function to complete character selection phase
+ * Simulates all players selecting characters to move to 'play' phase
+ */
+function completeCharacterSelection(client: ReturnType<typeof Client>): void {
+  let attempts = 0;
+  const maxAttempts = 10; // Safety limit (should only need numPlayers attempts)
+
+  while (attempts < maxAttempts) {
+    const state = client.getState();
+
+    if (state.ctx.phase !== 'characterSelection') {
+      // Already in play phase
+      return;
+    }
+
+    const currentPlayer = state.ctx.currentPlayer;
+    const G = state.G as BangGameState;
+    const player = G.players[currentPlayer];
+
+    // If current player hasn't selected, select their first choice
+    if (!player.hasSelectedCharacter && player.characterChoices && player.characterChoices.length > 0) {
+      const choice = player.characterChoices[0];
+      client.moves.selectCharacter(choice.id);
+      // End turn to advance to next player (CRITICAL - otherwise stays on same player)
+      client.events.endTurn();
+    } else {
+      // Player already selected, just end turn to move to next
+      client.events.endTurn();
+    }
+
+    attempts++;
+  }
+
+  // If we're still in character selection after max attempts, something is wrong
+  const finalState = client.getState();
+  if (finalState.ctx.phase === 'characterSelection') {
+    console.warn('[completeCharacterSelection] Failed to complete character selection after', maxAttempts, 'attempts');
+  }
+}
+
 describe('Game Flow Integration Tests', () => {
   describe('Game Initialization', () => {
     it('should initialize 4-player game without errors', () => {
@@ -183,6 +224,7 @@ describe('Game Flow Integration Tests', () => {
 
     beforeEach(() => {
       client = Client({ game: BangGame, numPlayers: 4 });
+      completeCharacterSelection(client); // Complete character selection to reach 'play' phase
     });
 
     it('should handle card drawing without errors', () => {
@@ -211,6 +253,7 @@ describe('Game Flow Integration Tests', () => {
   describe('Player Death', () => {
     it('should handle player death without crashing', () => {
       const client = Client({ game: BangGame, numPlayers: 4 });
+      completeCharacterSelection(client); // Complete character selection first
       const state = client.getState();
 
       // Skip test if state not properly initialized
@@ -239,6 +282,7 @@ describe('Game Flow Integration Tests', () => {
   describe('State Consistency', () => {
     it('should maintain valid state after 20 random turns', () => {
       const client = Client({ game: BangGame, numPlayers: 4 });
+      completeCharacterSelection(client); // Complete character selection first
 
       for (let i = 0; i < 20; i++) {
         const state = client.getState();
@@ -269,6 +313,7 @@ describe('Game Flow Integration Tests', () => {
 
     it('should never have undefined turnOrder during gameplay', () => {
       const client = Client({ game: BangGame, numPlayers: 4 });
+      completeCharacterSelection(client); // Complete character selection first
 
       for (let i = 0; i < 10; i++) {
         const state = client.getState();
@@ -288,6 +333,7 @@ describe('Game Flow Integration Tests', () => {
 
     it('should never have undefined players during gameplay', () => {
       const client = Client({ game: BangGame, numPlayers: 4 });
+      completeCharacterSelection(client); // Complete character selection first
 
       for (let i = 0; i < 10; i++) {
         const state = client.getState();
@@ -309,6 +355,7 @@ describe('Game Flow Integration Tests', () => {
   describe('Error Recovery', () => {
     it('should handle invalid moves gracefully', () => {
       const client = Client({ game: BangGame, numPlayers: 4 });
+      completeCharacterSelection(client); // Complete character selection first
 
       // Try to play a card that doesn't exist - should not crash
       expect(() => {
