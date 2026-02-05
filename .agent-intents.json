@@ -18,6 +18,24 @@
       "branch": "agent-1/feature/character-selection-ui",
       "description": "Implement character selection UI phase - show players 2 random characters to choose from",
       "timestamp": "2026-02-05T21:42:53Z"
+    },
+    {
+      "agent": "agent-1",
+      "branch": "agent-1/fix/gameflow-test",
+      "description": "Fix gameFlow integration test - complete character selection in beforeEach",
+      "timestamp": "2026-02-05T21:54:50Z"
+    },
+    {
+      "agent": "agent-4",
+      "branch": "agent-4/feature/server-and-cicd",
+      "description": "Fix server port conflict with auto-port selection and set up CI/CD pipeline",
+      "timestamp": "2026-02-05T22:07:18Z"
+    },
+    {
+      "agent": "agent-1",
+      "branch": "agent-1/fix/flaky-unit-tests",
+      "description": "Investigate and fix 2 flaky unit tests in moves.test.ts",
+      "timestamp": "2026-02-05T22:11:35Z"
     }
   ]
 }
