@@ -1086,9 +1086,17 @@ export function equipCard({ G, ctx }: { G: BangGameState; ctx: GameCtx }, cardId
 /**
  * Pass turn (end action phase)
  */
-export function passTurn({ G, ctx }: { G: BangGameState; ctx: GameCtx }) {
+export function passTurn({ G, ctx, events }: { G: BangGameState; ctx: GameCtx; events?: any }) {
   const playerId = ctx.currentPlayer;
   const player = G.players[playerId];
+
+  console.log('[passTurn] Called', {
+    playerId,
+    hasDrawn: player.hasDrawn,
+    hasEvents: !!events,
+    hasEndTurn: !!(events?.endTurn),
+    eventKeys: events ? Object.keys(events) : 'no events',
+  });
 
   // Cannot end turn if there's a pending action that needs resolution
   if (G.pendingAction && G.pendingAction.targetPlayerId !== playerId) {
@@ -1103,8 +1111,11 @@ export function passTurn({ G, ctx }: { G: BangGameState; ctx: GameCtx }) {
   }
 
   if (events?.endTurn) {
-    console.log('[passTurn] Ending turn for player', playerId);
+    console.log('[passTurn] Calling events.endTurn() for player', playerId);
     events.endTurn();
+    console.log('[passTurn] events.endTurn() called successfully');
+  } else {
+    console.warn('[passTurn] events.endTurn not available!', { hasEvents: !!events });
   }
 }
 

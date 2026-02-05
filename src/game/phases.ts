@@ -8,7 +8,7 @@ export const phases = {
     start: true,
     turn: {
       order: {
-        first: (G: BangGameState) => {
+        first: ({ G }: { G: BangGameState }) => {
           // Start with sheriff
           if (!G.turnOrder || !G.sheriffId) {
             // Silent return during initialization
@@ -16,7 +16,7 @@ export const phases = {
           }
           return G.turnOrder.indexOf(G.sheriffId);
         },
-        next: (G: BangGameState, ctx: any) => {
+        next: ({ G, ctx }: { G: BangGameState; ctx: any }) => {
           // Get next alive player
           if (!G.turnOrder || !G.players) {
             console.warn('turnOrder or players not initialized');

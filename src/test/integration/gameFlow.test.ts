@@ -120,12 +120,31 @@ describe('Game Flow Integration Tests', () => {
     });
 
     it('should progress to next player after ending turn', () => {
-      const initialPlayer = client.getState().ctx.currentPlayer;
+      const state1 = client.getState();
+      const G1 = state1.G as BangGameState;
+      const initialPlayer = state1.ctx.currentPlayer;
+
+      console.log('[Test] Initial state:', {
+        currentPlayer: initialPlayer,
+        turnOrder: G1.turnOrder,
+        alivePlayers: G1.turnOrder.filter(id => !G1.players[id].isDead),
+      });
 
       client.moves.standardDraw();
+
+      // In boardgame.io, turns end via events, not moves
+      // passTurn move is for game logic validation, but actual turn end is via events
       client.events.endTurn();
 
-      const nextPlayer = client.getState().ctx.currentPlayer;
+      const state2 = client.getState();
+      const G2 = state2.G as BangGameState;
+      const nextPlayer = state2.ctx.currentPlayer;
+
+      console.log('[Test] After endTurn:', {
+        currentPlayer: nextPlayer,
+        turnOrder: G2.turnOrder,
+        alivePlayers: G2.turnOrder.filter(id => !G2.players[id].isDead),
+      });
 
       expect(nextPlayer).not.toBe(initialPlayer);
     });
@@ -137,7 +156,7 @@ describe('Game Flow Integration Tests', () => {
       for (let i = 0; i < playerCount; i++) {
         expect(() => {
           client.moves.standardDraw();
-          client.events.endTurn();
+          client.moves.passTurn();
         }).not.toThrow();
       }
 
@@ -150,7 +169,7 @@ describe('Game Flow Integration Tests', () => {
       expect(() => {
         for (let i = 0; i < 10; i++) {
           client.moves.standardDraw();
-          client.events.endTurn();
+          client.moves.passTurn();
         }
       }).not.toThrow();
     });

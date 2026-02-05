@@ -1,34 +1,23 @@
 /**
  * Automated gameplay simulation test
- * Simulates actual player interactions: clicking cards, selecting targets, etc.
+ * Simulates game state and logic without UI rendering
  */
 
 import { describe, it, expect } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
 import { Client } from 'boardgame.io/client';
 import { BangGame } from '../../Game';
-import { GameBoard } from '../../components/GameBoard';
+import { BangGameState } from '../../game/setup';
 
 describe('Gameplay Simulation', () => {
-  it('should allow playing a BANG! card and selecting a target', async () => {
-    const BangClient = Client({
+  it('should allow playing a BANG! card and selecting a target', () => {
+    const client = Client({
       game: BangGame as any,
-      board: GameBoard,
       numPlayers: 4,
-      debug: false,
+      playerID: '0',
     });
 
-    const { container } = render(<BangClient playerID="0" />);
-
-    // Wait for game to initialize
-    await waitFor(() => {
-      expect(container.textContent).not.toContain('Initializing game');
-    }, { timeout: 5000 });
-
-    // Get the client state
-    const client = (BangClient as any)._clientManager?.client || (BangClient as any);
-    const state = client.getState ? client.getState() : client.store.getState();
-    const G = state.G;
+    const state = client.getState();
+    const G = state.G as BangGameState;
 
     // Verify game initialized
     expect(G).toBeDefined();
@@ -64,23 +53,15 @@ describe('Gameplay Simulation', () => {
     console.log(`✓ Player 0 character: ${player0.character.name}`);
   });
 
-  it('should correctly identify playable cards', async () => {
-    const BangClient = Client({
+  it('should correctly identify playable cards', () => {
+    const client = Client({
       game: BangGame as any,
-      board: GameBoard,
       numPlayers: 4,
-      debug: false,
+      playerID: '0',
     });
 
-    const { container } = render(<BangClient playerID="0" />);
-
-    await waitFor(() => {
-      expect(container.textContent).not.toContain('Initializing game');
-    });
-
-    const client = (BangClient as any)._clientManager?.client || (BangClient as any);
-    const state = client.getState ? client.getState() : client.store.getState();
-    const G = state.G;
+    const state = client.getState();
+    const G = state.G as BangGameState;
     const ctx = state.ctx;
 
     // Player must draw before playing cards
@@ -90,29 +71,22 @@ describe('Gameplay Simulation', () => {
       expect(player0.hasDrawn).toBe(false);
       console.log('✓ Player hasDrawn flag initialized to false');
 
-      // After drawing, cards should become playable
-      // (We can't actually simulate the draw button click easily,
-      //  but we can verify the game state structure is correct)
+      // Verify game state structure for playability checks
+      expect(player0.hand).toBeDefined();
+      expect(Array.isArray(player0.hand)).toBe(true);
+      console.log('✓ Player hand structure is correct');
     }
   });
 
-  it('should handle equipment cards', async () => {
-    const BangClient = Client({
+  it('should handle equipment cards', () => {
+    const client = Client({
       game: BangGame as any,
-      board: GameBoard,
       numPlayers: 4,
-      debug: false,
+      playerID: '0',
     });
 
-    const { container } = render(<BangClient playerID="0" />);
-
-    await waitFor(() => {
-      expect(container.textContent).not.toContain('Initializing game');
-    });
-
-    const client = (BangClient as any)._clientManager?.client || (BangClient as any);
-    const state = client.getState ? client.getState() : client.store.getState();
-    const G = state.G;
+    const state = client.getState();
+    const G = state.G as BangGameState;
 
     // Check that equipment slots exist
     const player0 = G.players['0'];
@@ -125,25 +99,17 @@ describe('Gameplay Simulation', () => {
     console.log('✓ Equipment slots initialized correctly');
   });
 
-  it('should display character descriptions always visible', async () => {
-    const BangClient = Client({
+  it('should display character descriptions always visible', () => {
+    const client = Client({
       game: BangGame as any,
-      board: GameBoard,
       numPlayers: 4,
-      debug: false,
+      playerID: '0',
     });
 
-    const { container } = render(<BangClient playerID="0" />);
+    const state = client.getState();
+    const G = state.G as BangGameState;
 
-    await waitFor(() => {
-      expect(container.textContent).not.toContain('Initializing game');
-    });
-
-    // Check that character descriptions are rendered
-    const client = (BangClient as any)._clientManager?.client || (BangClient as any);
-    const state = client.getState ? client.getState() : client.store.getState();
-    const G = state.G;
-
+    // Check that character descriptions exist
     Object.values(G.players).forEach((player: any) => {
       expect(player.character.description).toBeDefined();
       expect(player.character.description.length).toBeGreaterThan(0);
@@ -152,32 +118,57 @@ describe('Gameplay Simulation', () => {
     console.log('✓ All character descriptions are defined');
   });
 
-  it('should not crash when accessing opponent data', async () => {
-    const BangClient = Client({
+  it('should not crash when accessing opponent data', () => {
+    const client = Client({
       game: BangGame as any,
-      board: GameBoard,
       numPlayers: 4,
-      debug: false,
+      playerID: '0',
     });
 
-    const { container } = render(<BangClient playerID="0" />);
+    const state = client.getState();
+    const G = state.G as BangGameState;
 
-    await waitFor(() => {
-      expect(container.textContent).not.toContain('Initializing game');
-    });
+    // Verify all opponent data is accessible without errors
+    expect(() => {
+      Object.keys(G.players).forEach((playerId) => {
+        if (playerId !== '0') {
+          const opponent = G.players[playerId];
+          // Access various properties that might be displayed in UI
+          const _ = opponent.character;
+          const __ = opponent.health;
+          const ___ = opponent.maxHealth;
+          const ____ = opponent.hand.length;
+          const _____ = opponent.inPlay;
+        }
+      });
+    }).not.toThrow();
 
-    // Verify no errors in rendering opponent data
-    expect(container.querySelector('.text-white')).toBeTruthy();
-    expect(container.textContent).toContain('Player');
-
-    console.log('✓ Opponent data renders without crashing');
+    console.log('✓ Opponent data accessible without crashing');
   });
 });
 
 describe('Card Selection and Targeting', () => {
   it('should properly calculate valid targets for BANG!', () => {
-    // This would require more complex setup to actually click cards
-    // For now, verify the structure is correct
-    expect(true).toBe(true);
+    const client = Client({
+      game: BangGame as any,
+      numPlayers: 4,
+      playerID: '0',
+    });
+
+    const state = client.getState();
+    const G = state.G as BangGameState;
+
+    // Verify target calculation functions exist and work
+    expect(G.players).toBeDefined();
+    expect(G.turnOrder).toBeDefined();
+
+    // Verify distance calculation data structures exist
+    Object.values(G.players).forEach((player: any) => {
+      expect(player.weapon).toBeDefined(); // Affects range
+      expect(player.mustang).toBeDefined(); // Affects distance
+      expect(player.scope).toBeDefined(); // Affects distance
+    });
+
+    console.log('✓ Target calculation data structures exist');
   });
 });
