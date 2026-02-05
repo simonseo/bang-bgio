@@ -39,6 +39,20 @@
       "lockedFiles": [
         ".agent-coordination.json"
       ]
+    },
+    "agent-3-ralph": {
+      "sessionId": "ralph-loop-2026-02-05",
+      "name": "Agent 3 - AI Bug Fix (Ralph Loop)",
+      "status": "active",
+      "lastActive": "2026-02-05T21:45:00Z",
+      "currentTask": "Fixing AI takeDamage bug - AIManager calling disallowed move",
+      "branch": "agent-3/fix/ai-take-damage-bug",
+      "lastCommit": "8a9e375",
+      "completedTasks": [],
+      "lockedFiles": [
+        "src/ai/",
+        ".agent-coordination.json"
+      ]
     }
   },
   "communication": {
