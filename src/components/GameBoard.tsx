@@ -7,6 +7,7 @@ import { HealthDisplay } from './HealthDisplay';
 import { RoleBadge } from './RoleBadge';
 import { AIManager } from './AIManager';
 import { HelpPanel } from './HelpPanel';
+import { TurnIndicator } from './TurnIndicator';
 import { isCardPlayable, getValidTargetsForCard } from '../game/utils/playability';
 import { calculateDistance } from '../game/utils/distance';
 
@@ -315,14 +316,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({ G, ctx, moves, playerID })
       {/* AI Manager - automatically plays for AI players */}
       <AIManager G={G} ctx={ctx} moves={moves} playerID={playerID} />
 
-      {/* Top bar - Game info */}
-      <div className="bg-black/50 p-4 flex justify-between items-center">
-        <div className="text-white font-bold text-xl">Bang! Card Game</div>
-        <div className="text-white">
-          Turn: Player {ctx.currentPlayer} | Phase: {ctx.phase}
-        </div>
-        <div className="text-white">Deck: {G.deck.length} cards</div>
-      </div>
+      {/* Turn Indicator - Shows whose turn it is and waiting status */}
+      <TurnIndicator G={G} ctx={ctx} playerID={playerID} />
 
       {/* Opponents section - Horizontal scroll at top */}
       <div className="bg-black/30 p-4 border-b-2 border-black/50">
