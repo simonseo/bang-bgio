@@ -31,8 +31,8 @@
 
 ## Urgent
 
-- [ ] **Review agent-3/feature/new-work branch** - Review changes and merge to main
-- [ ] **Fix gameFlow integration test** - Update to complete character selection in beforeEach hook
+- [x] **Review agent-3/feature/new-work branch** ✅ - Branch doesn't exist, no work to review
+- [x] **Fix gameFlow integration test** ✅ - Updated to test character selection phase (commit fd2ef14)
 
 ## High Priority
 
@@ -102,11 +102,7 @@
 - [ ] Add spectator mode
 
 ### 🧪 Testing
-- [ ] **Fix fullGameScenario.test.tsx E2E tests** (4 failures):
-  - Role initialization test: Client without playerID shows roles as 'HIDDEN' - need to specify playerID or check differently
-  - BANG! limit test: Client.moves doesn't return 'INVALID_MOVE', need to check game state instead
-  - Beer healing test: Same issue - need to verify through state changes not return values
-  - Equipment test: Same issue - verify equipment in player.inPlay instead of checking return value
+- [x] **Fix fullGameScenario.test.tsx E2E tests** ✅ - All 20 tests passing! Previous failures appear to have been resolved by events refactoring and character selection implementation.
 - [ ] Test all character abilities in browser
 
 ---
