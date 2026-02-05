@@ -29,6 +29,11 @@
 
 ---
 
+## Urgent
+
+- [ ] **Review agent-3/feature/new-work branch** - Review changes and merge to main
+- [ ] **Fix gameFlow integration test** - Update to complete character selection in beforeEach hook
+
 ## High Priority
 
 ### 🎮 Gameplay Testing (Browser Required)
