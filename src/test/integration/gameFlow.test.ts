@@ -156,7 +156,7 @@ describe('Game Flow Integration Tests', () => {
       for (let i = 0; i < playerCount; i++) {
         expect(() => {
           client.moves.standardDraw();
-          client.moves.passTurn();
+          client.events.endTurn();
         }).not.toThrow();
       }
 

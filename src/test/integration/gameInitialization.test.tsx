@@ -1,11 +1,16 @@
 // Test game initialization and props flow
-import { describe, it, expect } from 'vitest';
-import { render, waitFor } from '@testing-library/react';
+import { describe, it, expect, afterEach } from 'vitest';
+import { render, waitFor, cleanup } from '@testing-library/react';
 import { Client } from 'boardgame.io/react';
 import { BangGame } from '../../Game';
 import { GameBoard } from '../../components/GameBoard';
 
 describe('Game Initialization', () => {
+  // Clean up after each test to prevent pollution
+  afterEach(() => {
+    cleanup();
+  });
+
   it('should initialize game and pass correct props to GameBoard', async () => {
     const BangClient = Client({
       game: BangGame as any,
