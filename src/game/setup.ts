@@ -13,6 +13,7 @@ export interface PlayerState {
   inPlay: string[];
   character: Character;
   characterChoices: Character[];
+  hasSelectedCharacter: boolean; // True when player has selected from choices
   role: Role;
   isDead: boolean;
   weapon: Card | null;
@@ -67,18 +68,14 @@ export function setup(context: any): BangGameState {
   // Assign roles
   const roles = assignRoles(numPlayers);
 
-  // Prepare character choices (2 per player) and assign one randomly
+  // Prepare character choices (2 per player)
   const allCharacters = shuffleCharacters();
   const characterChoicesPerPlayer: Character[][] = [];
-  const assignedCharacters: Character[] = [];
 
   for (let i = 0; i < numPlayers; i++) {
     const choice1 = allCharacters[i * 2];
     const choice2 = allCharacters[i * 2 + 1];
     characterChoicesPerPlayer.push([choice1, choice2]);
-    // For now, automatically assign the first choice
-    // TODO: Add character selection phase where player chooses
-    assignedCharacters.push(choice1);
   }
 
   // Find sheriff
@@ -92,12 +89,15 @@ export function setup(context: any): BangGameState {
   for (let i = 0; i < numPlayers; i++) {
     const playerId = String(i);
     const characterChoices = characterChoicesPerPlayer[i];
-    const character = assignedCharacters[i];
     const role = roles[i];
+
+    // Character will be selected by player in character selection phase
+    // Use a placeholder for now
+    const placeholderCharacter = characterChoices[0];
     const isSheriff = role === 'sheriff';
 
-    // Sheriff gets +1 health
-    const maxHealth = character.health + (isSheriff ? 1 : 0);
+    // Sheriff gets +1 health (will be recalculated when character selected)
+    const maxHealth = placeholderCharacter.health + (isSheriff ? 1 : 0);
 
     // Deal initial hand (cards equal to health)
     const hand: string[] = [];
@@ -113,8 +113,9 @@ export function setup(context: any): BangGameState {
       maxHealth,
       hand,
       inPlay: [],
-      character,
+      character: placeholderCharacter, // Will be updated by selectCharacter move
       characterChoices,
+      hasSelectedCharacter: false, // Will be set to true by selectCharacter move
       role,
       isDead: false,
       weapon: null,

@@ -1152,7 +1152,10 @@ export function discardCards({ G, ctx, events }: { G: BangGameState; ctx: GameCt
  * Select character from choices at game start
  */
 export function selectCharacter({ G, ctx }: { G: BangGameState; ctx: GameCtx }, characterId: string) {
-  const playerId = ctx.currentPlayer;
+  const playerId = ctx.currentPlayer || ctx.playerID;
+  if (!playerId) {
+    return INVALID_MOVE;
+  }
   const player = G.players[playerId];
 
   // Validate character is in player's choices
@@ -1163,6 +1166,7 @@ export function selectCharacter({ G, ctx }: { G: BangGameState; ctx: GameCtx }, 
 
   // Set the character
   player.character = selectedCharacter;
+  player.hasSelectedCharacter = true;
 
   // Update health based on character
   const isSheriff = player.role === 'sheriff';

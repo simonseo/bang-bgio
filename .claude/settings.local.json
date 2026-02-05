@@ -5,7 +5,11 @@
       "WebFetch(domain:static.wikia.nocookie.net)",
       "Bash(npm test:*)",
       "Bash(npm start)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(git checkout:*)",
+      "Bash(git commit:*)",
+      "Bash(git merge:*)"
     ]
   }
 }
