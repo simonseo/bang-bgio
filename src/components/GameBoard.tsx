@@ -8,6 +8,7 @@ import { RoleBadge } from './RoleBadge';
 import { AIManager } from './AIManager';
 import { HelpPanel } from './HelpPanel';
 import { TurnIndicator } from './TurnIndicator';
+import { ActionNotification } from './ActionNotification';
 import { isCardPlayable, getValidTargetsForCard } from '../game/utils/playability';
 import { calculateDistance } from '../game/utils/distance';
 
@@ -315,6 +316,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({ G, ctx, moves, playerID })
 
       {/* AI Manager - automatically plays for AI players */}
       <AIManager G={G} ctx={ctx} moves={moves} playerID={playerID} />
+
+      {/* Action Notifications - Show opponent actions */}
+      <ActionNotification G={G} ctx={ctx} playerID={playerID} />
 
       {/* Turn Indicator - Shows whose turn it is and waiting status */}
       <TurnIndicator G={G} ctx={ctx} playerID={playerID} />
