@@ -5,10 +5,10 @@
     "streamed-drifting-lerdorf": {
       "sessionId": "484ed494-ae4d-45c9-87a6-2a6037a3a313",
       "name": "Git Setup Agent",
-      "status": "completed",
-      "lastActive": "2026-02-05T20:30:00Z",
-      "currentTask": "Session complete - All assigned TODO items finished",
-      "lastCommit": "e1a4f22 - Add action notification system for opponent actions",
+      "status": "active",
+      "lastActive": "2026-02-05T20:35:00Z",
+      "currentTask": "Investigating integration test failures (6 failing tests)",
+      "lastCommit": "1e1fae3 - Update TODO list with completed items and AI bug",
       "completedTasks": [
         "Git repository initialization",
         "Agent coordination system setup",
@@ -17,7 +17,10 @@
         "Turn indicator UI with waiting status (committed in 1f313ca)",
         "Action notification system for opponent actions (e1a4f22)"
       ],
-      "lockedFiles": []
+      "lockedFiles": [
+        "src/test/integration/",
+        ".agent-coordination.json"
+      ]
     },
     "current-session": {
       "sessionId": "b17a9500-1cc2-4080-86ec-a2ab5aae6a56",

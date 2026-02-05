@@ -24,4 +24,8 @@ dist-ssr
 *.sw?
 
 # Agent coordination (keep for multi-agent work)
-# .agent-coordination.json is intentionally NOT ignored
+# These files are intentionally tracked for git-based coordination:
+# - .agent-coordination.json
+# - .agent-intents.json
+# - .agent-locks/*
+# - .merge-ready/*
