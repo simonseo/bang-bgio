@@ -145,9 +145,9 @@ function handleAIReactiveResponse(G: BangGameState, ctx: any, moves: any, player
         console.log(`[AI ${playerID}] Playing Missed!`);
         moves.playMissed(missed);
       } else {
-        // Take damage
-        console.log(`[AI ${playerID}] Taking damage`);
-        moves.takeDamage(1);
+        // No Missed! - call playMissed() without cardId to accept damage
+        console.log(`[AI ${playerID}] No Missed! - accepting damage`);
+        moves.playMissed();
       }
       break;
 

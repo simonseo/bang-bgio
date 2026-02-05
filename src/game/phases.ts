@@ -146,7 +146,7 @@ export const phases = {
       stages: {
         respondToBang: {
           moves: {
-            playMissed: (G: BangGameState, ctx: any, cardId: string) => {
+            playMissed: (G: BangGameState, ctx: any, cardId?: string) => {
               // Import from moves
               const { playMissed } = require('./moves');
               return playMissed({ G, ctx, events: ctx.events }, cardId);

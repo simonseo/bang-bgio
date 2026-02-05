@@ -132,7 +132,7 @@ export function playBang({ G, ctx, events }: { G: BangGameState; ctx: GameCtx; e
 /**
  * Play a Missed! card in response to BANG!
  */
-export function playMissed({ G, ctx, events }: { G: BangGameState; ctx: GameCtx; events: any }, cardId: string) {
+export function playMissed({ G, ctx, events }: { G: BangGameState; ctx: GameCtx; events: any }, cardId?: string) {
   const playerId = ctx.playerID || ctx.currentPlayer;
 
   console.log('[playMissed] Called', {
@@ -151,25 +151,41 @@ export function playMissed({ G, ctx, events }: { G: BangGameState; ctx: GameCtx;
   }
 
   const player = G.players[playerId];
-  const card = G.cardMap[cardId];
 
-  // Validate card type (allow Calamity Janet to use BANG! as Missed!)
-  const isValidMissed =
-    card.type === 'MISSED' ||
-    (card.type === 'BANG' && canSwapBangMissed(G, playerId));
+  // If cardId provided, play Missed! card
+  if (cardId) {
+    const card = G.cardMap[cardId];
 
-  if (!isValidMissed || !hasCard(G, playerId, cardId)) {
-    return INVALID_MOVE;
-  }
+    // Validate card type (allow Calamity Janet to use BANG! as Missed!)
+    const isValidMissed =
+      card.type === 'MISSED' ||
+      (card.type === 'BANG' && canSwapBangMissed(G, playerId));
 
-  // Remove card from hand and discard
-  const index = player.hand.indexOf(cardId);
-  player.hand.splice(index, 1);
-  G.discardPile.push(card);
+    if (!isValidMissed || !hasCard(G, playerId, cardId)) {
+      return INVALID_MOVE;
+    }
 
-  // Reduce required Missed! count
-  if (G.pendingAction.requiresMissed) {
-    G.pendingAction.requiresMissed--;
+    // Remove card from hand and discard
+    const index = player.hand.indexOf(cardId);
+    player.hand.splice(index, 1);
+    G.discardPile.push(card);
+
+    // Reduce required Missed! count
+    if (G.pendingAction.requiresMissed) {
+      G.pendingAction.requiresMissed--;
+    }
+  } else {
+    // No card provided - take damage (AI doesn't have Missed!)
+    console.log(`[playMissed] No card provided - player ${playerId} takes damage`);
+    player.health -= 1;
+
+    // Check if player died
+    if (player.health <= 0) {
+      handlePlayerDeath(G, ctx, playerId);
+    }
+
+    // Trigger damage abilities
+    handleDamageAbilities(G, ctx, playerId);
   }
 
   // If all Missed! played, check for more targets or end
