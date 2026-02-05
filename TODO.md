@@ -3,8 +3,8 @@
 > **Note:** Completed items archived in `.docs/archive/COMPLETED_TODOS.md`
 > **Session Logs:** See `.docs/SESSION_2026-02-05_RALPH_LOOP.md` for latest work
 
-**Last Updated:** 2026-02-05 20:30
-**Test Status:** 226/237 tests passing ✅ (95% - Unit: 114/114, E2E: 25/25, Integration: 13/19)
+**Last Updated:** 2026-02-05 21:36
+**Test Status:** 232/237 tests passing ✅ (98% - Unit: 114/114, E2E: 25/25, Integration: 28/28 ✅)
 **Character Abilities:** 16/16 tested ✅ (all characters complete!)
 **Refactoring:** Events parameter pattern complete ✅
 **Git:** Initialized ✅ (commits: defa3b3, e36462c, 1f313ca, e1a4f22, 5f8b7b9)
@@ -44,7 +44,7 @@
 
 ### 🐛 Bug Fixes
 - [x] **Server connection bug** ✅ - Fixed with `npm run start:host` for network play (commit e36462c, see NETWORK_SETUP.md)
-- [ ] **AI takeDamage bug** - AIManager tries to call `takeDamage` as a move during `respondToBang` stage, but gets "ERROR: disallowed move: takeDamage". The AI should either play Missed! or accept damage automatically, not call takeDamage as a move.
+- [ ] **AI takeDamage bug** - ⚠️ INVESTIGATION: takeDamage IS available in respondToBang stage (phases.ts:158-161) and tests pass. May be outdated TODO or requires browser testing to reproduce.
 
 ---
 
