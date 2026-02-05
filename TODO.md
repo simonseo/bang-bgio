@@ -3,10 +3,11 @@
 > **Note:** Completed items archived in `.docs/archive/COMPLETED_TODOS.md`
 > **Session Logs:** See `.docs/SESSION_2026-02-05_RALPH_LOOP.md` for latest work
 
-**Last Updated:** 2026-02-05 11:52
-**Test Status:** 222/237 tests passing ✅ (114/114 unit tests ✅, some E2E tests need work)
+**Last Updated:** 2026-02-05 20:30
+**Test Status:** 226/237 tests passing ✅ (95% - Unit: 114/114, E2E: 25/25, Integration: 13/19)
 **Character Abilities:** 16/16 tested ✅ (all characters complete!)
 **Refactoring:** Events parameter pattern complete ✅
+**Git:** Initialized ✅ (commits: defa3b3, e36462c, 1f313ca, e1a4f22, 5f8b7b9)
 
 ---
 
@@ -38,11 +39,12 @@
 - [ ] Verify: Barrel can be used to dodge BANG!
 
 ### 🎨 UI/UX Improvements
-- [ ] Add turn timer or "waiting for..." indicator
-- [ ] **Action alerts for other players** - Show notifications when opponents play cards, take damage, etc.
+- [x] **Turn timer/waiting indicator** ✅ - Shows whose turn it is, waiting status, pending actions (commit 1f313ca)
+- [x] **Action alerts for other players** ✅ - Real-time notifications for opponent actions (commit e1a4f22)
 
 ### 🐛 Bug Fixes
-- [ ] **Server connection bug** - Cannot connect with `npm start --host`, error says "Cannot connect to server. Make sure the server is running"
+- [x] **Server connection bug** ✅ - Fixed with `npm run start:host` for network play (commit e36462c, see NETWORK_SETUP.md)
+- [ ] **AI takeDamage bug** - AIManager tries to call `takeDamage` as a move during `respondToBang` stage, but gets "ERROR: disallowed move: takeDamage". The AI should either play Missed! or accept damage automatically, not call takeDamage as a move.
 
 ---
 
