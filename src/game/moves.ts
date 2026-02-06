@@ -707,9 +707,9 @@ export function playGeneralStore({ G, ctx, events }: { G: BangGameState; ctx: Ga
   for (let i = 0; i < numCards; i++) {
     // Reshuffle discard pile if deck is empty
     if (G.deck.length === 0) {
-      G.deck = [...G.discardPile];
+      const { shuffleDeck } = require('../data/deck');
+      G.deck = shuffleDeck([...G.discardPile]);
       G.discardPile = [];
-      // TODO: shuffle deck
     }
 
     const drawnCard = G.deck.pop();
@@ -868,8 +868,7 @@ export function resolveDynamite({ G, ctx, events }: { G: BangGameState; ctx: Gam
 
     // Check for death
     if (player.health <= 0) {
-      player.isDead = true;
-      // TODO: Handle death (rewards, etc.)
+      handlePlayerDeath(G, ctx, playerId);
     }
   } else {
     // Pass Dynamite to next alive player
