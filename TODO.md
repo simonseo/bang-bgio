@@ -95,26 +95,29 @@
 
 ---
 
-### **Agent 4 - Next Task: TEST NETWORK MULTIPLAYER** 🟡 MEDIUM PRIORITY
-**Assigned Task:** Verify network multiplayer functionality
+### **Agent 4 - COMPLETED: TEST NETWORK MULTIPLAYER** ✅
+**Status:** COMPLETE - Comprehensive test report created
 
-**Context:**
-- Server port conflict was fixed (auto-find port 8000-8009)
-- CI/CD pipeline now deployed
-- Need to verify end-to-end network gameplay works
+**Completed Actions:**
+1. ✅ Tested network multiplayer setup
+2. ✅ Verified server functionality with various ports
+3. ✅ Tested API endpoints (/games returns ["bang"])
+4. ✅ Reviewed NetworkLobby UI (excellent!)
+5. ✅ Created comprehensive test report (`.docs/NETWORK_MULTIPLAYER_TEST_REPORT.md`)
+6. ✅ Identified 10 issues and provided prioritized recommendations
+7. ✅ Updated TODO.md with detailed findings
 
-**Action Required:**
-1. Test network multiplayer setup following NETWORK_SETUP.md
-2. Verify: Host can start game, clients can connect, gameplay works
-3. Document any issues found
-4. Create test scenarios for future E2E network tests
-5. Create branch: `agent-4/test/network-multiplayer`
-6. Document findings in `.docs/NETWORK_MULTIPLAYER_TEST_REPORT.md`
+**Key Findings:**
+- 🟡 Overall Status: FUNCTIONAL but INCOMPLETE
+- ✅ Core functionality works
+- ⚠️ Several improvements needed (see report)
+- Estimated effort to production-ready: 20-35 days
 
-**Follow-up Tasks (After Network Test):**
-- Add player names/avatars (user-facing feature)
-- Add chat system (communication feature)
-- Add spectator mode (advanced feature)
+**Next Priority Tasks for Agent 4:**
+1. 🔴 HIGH: Fix IP detection (shows wrong IP for LAN play)
+2. 🟡 MEDIUM: Add match browser UI
+3. 🟡 MEDIUM: Implement lobby waiting room with real-time updates
+4. 🟡 MEDIUM: Display player names in game
 
 ---
 
@@ -213,11 +216,21 @@
 - [ ] Undo/Redo support (if boardgame.io supports it)
 
 ### 🌐 Multiplayer
-- [x] **Fix server port conflict** ✅ - Server now automatically finds available port (8000-8009)
-- [ ] **Test network multiplayer works** 🟡 - AGENT 4 ASSIGNED (verify end-to-end network gameplay)
-- [ ] Add player names/avatars (After network test complete)
-- [ ] Add chat system (After network test complete)
-- [ ] Add spectator mode (After network test complete)
+- [x] **Test network multiplayer** ✅ - Comprehensive testing complete (see `.docs/NETWORK_MULTIPLAYER_TEST_REPORT.md`)
+  - **Status:** 🟡 FUNCTIONAL but INCOMPLETE
+  - ✅ Server works correctly with custom port
+  - ✅ NetworkLobby UI excellent
+  - ✅ API endpoints functional
+  - ⚠️ Issues identified (see report for details)
+- [ ] **Fix server port conflict** 🔴 HIGH - Server crashes on EADDRINUSE (fix available in `agent-4/feature/server-and-cicd` PR - needs merge)
+- [ ] **Fix IP detection** 🟡 MEDIUM - Shows public IP instead of local IP for LAN play
+- [ ] **Add match browser** 🟡 MEDIUM - List and join available games
+- [ ] **Implement lobby waiting room** 🟡 MEDIUM - Real-time player list, ready status
+- [ ] **Display player names in game** 🟡 MEDIUM - Essential for multiplayer identity
+- [ ] Add server URL configuration 🟠 LOW - Input field for custom server URL
+- [ ] Add chat system 🟠 LOW
+- [ ] Add spectator mode 🟠 LOW
+- [ ] Add reconnection handling 🟠 LOW
 
 ### 🧪 Testing
 - [x] **Fix fullGameScenario.test.tsx E2E tests** ✅ - All 20 tests passing! Previous failures appear to have been resolved by events refactoring and character selection implementation.
