@@ -54,7 +54,36 @@ export const BangGame = {
         }
 
         // After drawing, enumerate playable cards
-        // For now, just allow passing turn (can enhance with card plays later)
+        // Simple bot logic: Try to play BANG! if available and not at limit
+        const hasUnlimitedBangs = player.weapon?.type === 'VOLCANIC' || player.character?.id === 'willy-the-kid';
+        const canPlayBang = hasUnlimitedBangs || player.bangsPlayedThisTurn < 1;
+
+        if (canPlayBang) {
+          // Find BANG! cards in hand
+          const bangCard = player.hand.find(cardId => {
+            const card = G.cardMap[cardId];
+            return card && card.type === 'BANG';
+          });
+
+          if (bangCard) {
+            // Find valid targets (alive players within range)
+            const alivePlayers = Object.keys(G.players).filter(id =>
+              id !== ctx.currentPlayer && !G.players[id].isDead
+            );
+
+            if (alivePlayers.length > 0) {
+              // Simple strategy: target first alive player
+              const target = alivePlayers[0];
+              moves.push({
+                move: 'playBang',
+                args: [bangCard, target]
+              });
+              return moves;
+            }
+          }
+        }
+
+        // If can't play BANG!, just pass turn
         moves.push({
           move: 'passTurn',
           args: []
