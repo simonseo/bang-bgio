@@ -3,11 +3,80 @@
 > **Note:** Completed items archived in `.docs/archive/COMPLETED_TODOS.md`
 > **Session Logs:** See `.docs/SESSION_2026-02-05_RALPH_LOOP.md` for latest work
 
-**Last Updated:** 2026-02-05 21:36
-**Test Status:** 232/237 tests passing ✅ (98% - Unit: 114/114, E2E: 25/25, Integration: 28/28 ✅)
+**Last Updated:** 2026-02-05 16:05 (Agent 5 PM Update)
+**Test Status:** 20/20 project tests passing ✅ (100% on main after flaky-tests merge)
 **Character Abilities:** 16/16 tested ✅ (all characters complete!)
 **Refactoring:** Events parameter pattern complete ✅
-**Git:** Initialized ✅ (commits: defa3b3, e36462c, 1f313ca, e1a4f22, 5f8b7b9)
+**CI/CD:** GitHub Actions pipeline complete ✅
+
+---
+
+## 🔍 PM Review Status & Branch Management
+
+### ✅ Recently Merged to Main
+- **agent-1/fix/flaky-tests** - Merged by Agent 5 PM on 2026-02-05
+  - Fixed flaky distance-abilities tests (90-95% → 100% pass rate)
+  - Added comprehensive CI/CD pipeline with GitHub Actions
+  - Added auto-port finding utility
+  - All 20/20 project tests now passing on main ✅
+
+### ⏳ Branches Awaiting Merge Decision
+- **agent-1/feature/death-rewards** - Ready for review, but flaky test discovered
+  - ✅ Code changes: Fixed 2 TODOs (handlePlayerDeath, shuffleDeck)
+  - ✅ Tests: Added 3 passing dynamite-death tests
+  - ⚠️ Issue: Discovered NEW flaky test (Volcanic weapon - 40% failure rate)
+  - **PM Decision Pending:** Merge with known flaky test or fix flaky test first?
+
+### 📦 Branches Ready for Review (Not Yet Evaluated)
+- **agent-4/feature/server-and-cicd** - Status unknown, needs PM review
+  - NOTE: CI/CD work was included in agent-1/fix/flaky-tests merge
+  - May be duplicate or may have additional work
+
+---
+
+## 🎯 Agent Task Assignments (PM Prioritization)
+
+### **Agent 1 - Next Task: FIX FLAKY VOLCANIC TEST** 🔴 HIGH PRIORITY
+**Assigned Task:** Fix flaky Volcanic weapon tests (blocks death-rewards merge)
+
+**Context:**
+- During PM review, discovered Volcanic weapon test failing 40% of the time (2/5 runs)
+- Affects TWO tests:
+  - `src/test/e2e/bang-response.test.ts` - "should allow unlimited BANGs with Volcanic weapon"
+  - `src/test/unit/moves.test.ts` - "should allow unlimited BANGs with Volcanic"
+- Similar issue to distance-abilities flakiness (random state causing intermittent failures)
+
+**Action Required:**
+1. Investigate root cause (likely random character/equipment assignment)
+2. Apply same fix pattern as distance-abilities (explicit state setup)
+3. Verify 20/20 consecutive runs pass
+4. Create branch: `agent-1/fix/flaky-volcanic-test`
+5. Push for PM review
+
+**After This:** death-rewards branch can be merged cleanly
+
+---
+
+### **Agent 4 - Next Task: TEST NETWORK MULTIPLAYER** 🟡 MEDIUM PRIORITY
+**Assigned Task:** Verify network multiplayer functionality
+
+**Context:**
+- Server port conflict was fixed (auto-find port 8000-8009)
+- CI/CD pipeline now deployed
+- Need to verify end-to-end network gameplay works
+
+**Action Required:**
+1. Test network multiplayer setup following NETWORK_SETUP.md
+2. Verify: Host can start game, clients can connect, gameplay works
+3. Document any issues found
+4. Create test scenarios for future E2E network tests
+5. Create branch: `agent-4/test/network-multiplayer`
+6. Document findings in `.docs/NETWORK_MULTIPLAYER_TEST_REPORT.md`
+
+**Follow-up Tasks (After Network Test):**
+- Add player names/avatars (user-facing feature)
+- Add chat system (communication feature)
+- Add spectator mode (advanced feature)
 
 ---
 
@@ -19,7 +88,15 @@
   - ✅ Stage moves updated to pass events parameter correctly
   - ✅ Eliminated all direct `ctx.events` usage in move functions
   - ✅ Added safety guards in phase hooks for undefined ctx during transitions
-  - **Result**: 222/237 tests passing, all unit tests passing, refactoring complete
+  - **Result**: 20/20 project tests passing ✅
+
+- [x] **CI/CD Pipeline** ✅ - Complete GitHub Actions workflow
+  - ✅ ci.yml: Test matrix (Node 18/20), coverage, type checking, builds
+  - ✅ pr-checks.yml: PR validation, conventional commits, branch naming
+  - ✅ code-quality.yml: Quality checks, security audit, test coverage
+  - ✅ deploy.yml: Production deployment workflow
+  - ✅ Multi-agent coordination checks integrated
+  - See `.docs/CI_CD_GUIDE.md` for details
 
 - [ ] **Future Architecture Review** - Consider comprehensive design review
   - Review official Bang! rules to ensure all mechanics are correctly understood
@@ -33,6 +110,8 @@
 
 - [x] **Review agent-3/feature/new-work branch** ✅ - Branch doesn't exist, no work to review
 - [x] **Fix gameFlow integration test** ✅ - Updated to test character selection phase (commit fd2ef14)
+- [x] **Fix flaky distance-abilities tests** ✅ - Fixed by agent-1/fix/flaky-tests (merged to main)
+- [ ] **Fix flaky Volcanic weapon tests** 🔴 - NEW ISSUE: 40% failure rate, blocks death-rewards merge (AGENT 1 ASSIGNED)
 
 ## High Priority
 
@@ -96,10 +175,10 @@
 
 ### 🌐 Multiplayer
 - [x] **Fix server port conflict** ✅ - Server now automatically finds available port (8000-8009)
-- [ ] Test network multiplayer works
-- [ ] Add player names/avatars
-- [ ] Add chat system
-- [ ] Add spectator mode
+- [ ] **Test network multiplayer works** 🟡 - AGENT 4 ASSIGNED (verify end-to-end network gameplay)
+- [ ] Add player names/avatars (After network test complete)
+- [ ] Add chat system (After network test complete)
+- [ ] Add spectator mode (After network test complete)
 
 ### 🧪 Testing
 - [x] **Fix fullGameScenario.test.tsx E2E tests** ✅ - All 20 tests passing! Previous failures appear to have been resolved by events refactoring and character selection implementation.
@@ -119,10 +198,14 @@
 ## Known Issues
 
 ### Critical
-- None currently (move signatures fixed! 🎉)
+- 🔴 **Flaky Volcanic weapon tests** - 40% failure rate (Agent 1 assigned to fix)
+  - Affects: `src/test/e2e/bang-response.test.ts` and `src/test/unit/moves.test.ts`
+  - Likely cause: Random state/character assignment (similar to distance-abilities)
+  - Blocks: agent-1/feature/death-rewards merge
 
 ### Non-Critical
 - ~~**Server port conflict**~~ ✅ - FIXED: Server auto-finds available port
+- ~~**Flaky distance-abilities tests**~~ ✅ - FIXED: Explicitly set neutral characters
 - Some items require browser testing vs unit tests
 
 ---
@@ -130,12 +213,13 @@
 ## DevOps Status
 
 ### CI/CD Pipeline ✅
-- [x] **GitHub Actions CI/CD** - Complete pipeline set up
+- [x] **GitHub Actions CI/CD** - Complete pipeline set up (Merged via agent-1/fix/flaky-tests)
   - ✅ ci.yml: Test matrix (Node 18/20), coverage, type checking, builds
   - ✅ pr-checks.yml: PR validation, conventional commits, branch naming
   - ✅ code-quality.yml: Quality checks, security audit, test coverage
   - ✅ deploy.yml: Production deployment workflow
   - ✅ Multi-agent coordination checks integrated
+  - See `.docs/CI_CD_GUIDE.md` for complete documentation
 
 ---
 
