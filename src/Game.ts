@@ -40,9 +40,21 @@ export const BangGame = {
         }
       }
 
-      // Play phase - use existing AI logic
+      // Play phase
       if (ctx.phase === 'play') {
-        // For now, just pass turn (we can enhance this later)
+        const player = G.players[ctx.currentPlayer];
+
+        // Must draw cards first
+        if (!player.hasDrawn) {
+          moves.push({
+            move: 'standardDraw',
+            args: []
+          });
+          return moves; // Only return draw move if not drawn yet
+        }
+
+        // After drawing, enumerate playable cards
+        // For now, just allow passing turn (can enhance with card plays later)
         moves.push({
           move: 'passTurn',
           args: []
