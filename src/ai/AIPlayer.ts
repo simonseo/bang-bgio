@@ -15,6 +15,14 @@ export function playAITurn(G: BangGameState, ctx: any, moves: any, playerID: str
     return;
   }
 
+  // Character Selection Phase - select first character
+  if (ctx.phase === 'characterSelection') {
+    if (!player.hasSelectedCharacter && player.characterChoices && player.characterChoices.length > 0) {
+      moves.selectCharacter(player.characterChoices[0].id);
+    }
+    return;
+  }
+
   // Phase 1: Draw cards if haven't yet
   if (!player.hasDrawn) {
     moves.standardDraw();
