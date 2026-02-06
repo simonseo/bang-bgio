@@ -15,7 +15,8 @@ export const phases = {
     },
     moves: {
       selectCharacter: (G: BangGameState, ctx: any, characterId: string) => {
-        return selectCharacter({ G, ctx, events: ctx.events }, characterId);
+        const { selectCharacter: selectCharacterMove } = require('./moves');
+        return selectCharacterMove({ G, ctx, events: ctx.events }, characterId);
       },
     },
     endIf: ({ G }: { G: BangGameState }) => {
