@@ -21,6 +21,11 @@ describe('Distance-Modifying Character Abilities', () => {
 
   describe('Paul Regret - Seen at distance +1', () => {
     it('should add 1 to distance when targeting Paul Regret', () => {
+      // IMPORTANT: Set both players to neutral characters first to avoid flakiness
+      // (setup() randomly assigns characters, could assign Rose Doolan who counters Paul Regret)
+      const neutralChar = CHARACTERS.find(c => c.id === 'bart-cassidy')!;
+      G.players['0'].character = neutralChar;
+
       // Set player 1 to Paul Regret
       const paulRegret = CHARACTERS.find(c => c.id === 'paul-regret')!;
       G.players['1'].character = paulRegret;
@@ -38,9 +43,9 @@ describe('Distance-Modifying Character Abilities', () => {
       const paulRegret = CHARACTERS.find(c => c.id === 'paul-regret')!;
       G.players['0'].character = paulRegret;
 
-      // Set player 1 to someone else
-      const otherChar = CHARACTERS.find(c => c.id !== 'paul-regret')!;
-      G.players['1'].character = otherChar;
+      // Set player 1 to a neutral character (not Rose Doolan to avoid distance modifier conflicts)
+      const neutralChar = CHARACTERS.find(c => c.id === 'bart-cassidy')!;
+      G.players['1'].character = neutralChar;
 
       // Calculate distance from player 0 to player 1
       const distance = calculateDistance(G, '0', '1');
@@ -50,6 +55,10 @@ describe('Distance-Modifying Character Abilities', () => {
     });
 
     it('should stack with Mustang', () => {
+      // Set player 0 to neutral character
+      const neutralChar = CHARACTERS.find(c => c.id === 'bart-cassidy')!;
+      G.players['0'].character = neutralChar;
+
       // Set player 1 to Paul Regret with Mustang
       const paulRegret = CHARACTERS.find(c => c.id === 'paul-regret')!;
       G.players['1'].character = paulRegret;
@@ -69,6 +78,10 @@ describe('Distance-Modifying Character Abilities', () => {
       const roseDoolan = CHARACTERS.find(c => c.id === 'rose-doolan')!;
       G.players['0'].character = roseDoolan;
 
+      // Set player 2 to neutral character
+      const neutralChar = CHARACTERS.find(c => c.id === 'bart-cassidy')!;
+      G.players['2'].character = neutralChar;
+
       // Player 2 is at distance 2 normally
       const distance = calculateDistance(G, '0', '2');
 
@@ -80,6 +93,10 @@ describe('Distance-Modifying Character Abilities', () => {
       // Set player 0 to Rose Doolan
       const roseDoolan = CHARACTERS.find(c => c.id === 'rose-doolan')!;
       G.players['0'].character = roseDoolan;
+
+      // Set player 1 to neutral character
+      const neutralChar = CHARACTERS.find(c => c.id === 'bart-cassidy')!;
+      G.players['1'].character = neutralChar;
 
       // Calculate distance to adjacent player
       const distance = calculateDistance(G, '0', '1');
@@ -93,9 +110,9 @@ describe('Distance-Modifying Character Abilities', () => {
       const roseDoolan = CHARACTERS.find(c => c.id === 'rose-doolan')!;
       G.players['1'].character = roseDoolan;
 
-      // Set player 0 to someone else
-      const otherChar = CHARACTERS.find(c => c.id !== 'rose-doolan')!;
-      G.players['0'].character = otherChar;
+      // Set player 0 to neutral character
+      const neutralChar = CHARACTERS.find(c => c.id === 'bart-cassidy')!;
+      G.players['0'].character = neutralChar;
 
       // Calculate distance from player 0 to player 1
       const distance = calculateDistance(G, '0', '1');

@@ -6,6 +6,7 @@
 // For production, you should build the server separately.
 
 const { Server, Origins } = require('boardgame.io/server');
+const { findAvailablePort } = require('./src/server/port-utils.cjs');
 
 // Minimal game definition for server
 // The actual game logic runs on the client
@@ -32,15 +33,22 @@ const server = Server({
   ],
 });
 
-const PORT = process.env.PORT || 8000;
+const PREFERRED_PORT = parseInt(process.env.PORT || '8000', 10);
 
-// Add error handling for port conflicts
+// Start server with automatic port finding
 const startServer = async () => {
   try {
-    await server.run(PORT, () => {
+    // Try to find an available port starting from the preferred port
+    const port = await findAvailablePort(PREFERRED_PORT, 10);
+
+    if (port !== PREFERRED_PORT) {
+      console.log(`⚠️  Port ${PREFERRED_PORT} is in use, using port ${port} instead`);
+    }
+
+    await server.run(port, () => {
       console.log('🤠 Bang! Multiplayer Server Running');
       console.log('=====================================');
-      console.log(`📡 Server: http://localhost:${PORT}`);
+      console.log(`📡 Server: http://localhost:${port}`);
       console.log('');
       console.log('⚠️  NOTE: This is a placeholder server.');
       console.log('    Game logic runs on the client side.');
@@ -56,16 +64,18 @@ const startServer = async () => {
       console.log('');
       console.log('📱 Mobile players: Use the local network IP');
       console.log('');
+      console.log('💡 To use a specific port: PORT=8001 npm run server');
+      console.log('');
     });
   } catch (error) {
-    if (error.code === 'EADDRINUSE') {
-      console.error('❌ Error: Port', PORT, 'is already in use!');
+    if (error.message && error.message.includes('Could not find available port')) {
+      console.error('❌ Error: Could not find an available port!');
+      console.error('');
+      console.error('Tried ports', PREFERRED_PORT, 'through', PREFERRED_PORT + 9);
       console.error('');
       console.error('💡 Solutions:');
-      console.error('   1. Kill the process using the port:');
-      console.error(`      lsof -ti:${PORT} | xargs kill -9`);
-      console.error('   2. Use a different port:');
-      console.error(`      PORT=8001 npm run server`);
+      console.error('   1. Kill processes using these ports');
+      console.error('   2. Use a different port range: PORT=9000 npm run server');
       console.error('');
       process.exit(1);
     } else {

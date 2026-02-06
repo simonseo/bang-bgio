@@ -1,0 +1,63 @@
+name: Deploy to Production
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'production' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test -- --run
+
+      - name: Build for production
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Deploy notification
+        run: |
+          echo "🚀 Deploying to ${{ github.event.inputs.environment || 'production' }}"
+          echo "Version: ${{ github.event.release.tag_name || github.sha }}"
+          echo ""
+          echo "📦 Build artifacts ready in dist/"
+          echo ""
+          echo "Next steps for manual deployment:"
+          echo "1. Upload dist/ to your hosting service"
+          echo "2. Start server with: node server.cjs"
+          echo "3. Configure environment variables (PORT, etc.)"
+          echo ""
+          echo "See DEPLOYMENT.md for detailed instructions"
+
+      # Add deployment steps here based on your hosting service
+      # Examples:
+      # - Heroku: heroku/deploy-heroku@master
+      # - Netlify: netlify/actions/cli@master
+      # - Vercel: amondnet/vercel-action@v25
+      # - Railway: railwayapp/railway-action@v1

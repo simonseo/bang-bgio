@@ -1,0 +1,138 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  pr-validation:
+    name: PR Validation
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Need full history for comparison
+
+      - name: Check PR title
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          if ! echo "$PR_TITLE" | grep -qE '^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.+\))?: .+'; then
+            echo "❌ PR title must follow conventional commit format"
+            echo "Current title: $PR_TITLE"
+            echo ""
+            echo "Examples:"
+            echo "  feat(server): Add auto port finding"
+            echo "  fix(ui): Resolve card display issue"
+            echo "  docs: Update README with deployment instructions"
+            exit 1
+          fi
+          echo "✅ PR title follows conventional commit format"
+
+      - name: Check PR description
+        run: |
+          if [ -z "${{ github.event.pull_request.body }}" ]; then
+            echo "⚠️  Warning: PR has no description"
+            echo "Consider adding:"
+            echo "  - What changes were made"
+            echo "  - Why these changes were needed"
+            echo "  - Testing performed"
+          else
+            echo "✅ PR has a description"
+          fi
+
+      - name: Check for test updates
+        run: |
+          # Check if code changes include corresponding test updates
+          CODE_CHANGES=$(git diff --name-only origin/main...HEAD | grep -E '^src/(game|components|server)/' | grep -v '\.test\.' || true)
+          TEST_CHANGES=$(git diff --name-only origin/main...HEAD | grep -E '\.test\.(ts|tsx)$' || true)
+
+          if [ -n "$CODE_CHANGES" ] && [ -z "$TEST_CHANGES" ]; then
+            echo "⚠️  Warning: Code changes detected without test updates"
+            echo "Modified files:"
+            echo "$CODE_CHANGES"
+            echo ""
+            echo "Consider adding tests to verify your changes"
+          else
+            echo "✅ Tests included or no source code changes"
+          fi
+
+      - name: Check for documentation updates
+        run: |
+          # Check if new features have documentation
+          FEAT_COMMITS=$(git log --format=%s origin/main..HEAD | grep -E '^feat' || true)
+          DOC_CHANGES=$(git diff --name-only origin/main...HEAD | grep -E '\.(md|txt)$' || true)
+
+          if [ -n "$FEAT_COMMITS" ] && [ -z "$DOC_CHANGES" ]; then
+            echo "⚠️  Warning: New features added without documentation updates"
+            echo ""
+            echo "Consider updating:"
+            echo "  - README.md - If user-facing changes"
+            echo "  - .docs/ - For technical documentation"
+            echo "  - TODO.md - Mark completed items"
+          else
+            echo "✅ Documentation updated or no new features"
+          fi
+
+      - name: Check branch naming
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          if ! echo "$BRANCH_NAME" | grep -qE '^agent-[0-9]+/(feature|fix|refactor|test|docs|ui)/[a-z0-9-]+$'; then
+            echo "⚠️  Warning: Branch name doesn't follow convention"
+            echo "Current: $BRANCH_NAME"
+            echo ""
+            echo "Expected format: agent-{n}/{type}/{description}"
+            echo "Example: agent-4/feature/cicd-setup"
+          else
+            echo "✅ Branch name follows convention"
+          fi
+
+  size-check:
+    name: PR Size Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PR size
+        run: |
+          ADDED=$(git diff --shortstat origin/main...HEAD | grep -oE '[0-9]+ insertion' | grep -oE '[0-9]+' || echo "0")
+          DELETED=$(git diff --shortstat origin/main...HEAD | grep -oE '[0-9]+ deletion' | grep -oE '[0-9]+' || echo "0")
+          TOTAL=$((ADDED + DELETED))
+
+          echo "Changes: +$ADDED -$DELETED (total: $TOTAL lines)"
+
+          if [ $TOTAL -gt 1000 ]; then
+            echo "⚠️  Large PR: $TOTAL lines changed"
+            echo "Consider breaking into smaller PRs for easier review"
+          elif [ $TOTAL -gt 500 ]; then
+            echo "⚠️  Medium-large PR: $TOTAL lines"
+          else
+            echo "✅ Reasonably sized PR"
+          fi
+
+  conflict-check:
+    name: Merge Conflict Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for merge conflicts
+        run: |
+          git fetch origin main
+          if git merge-tree $(git merge-base HEAD origin/main) HEAD origin/main | grep -q '<<<<<<<'; then
+            echo "❌ Merge conflicts detected with main branch"
+            echo "Please resolve conflicts before merging"
+            exit 1
+          else
+            echo "✅ No merge conflicts detected"
+          fi
