@@ -57,6 +57,44 @@
 
 ---
 
+### **Agent 3 - Next Task: BROWSER TESTING SUITE** 🟢 HIGH PRIORITY
+**Assigned Task:** Manual QA testing of core gameplay in browser
+
+**Context:**
+- All unit/E2E tests passing (20/20)
+- Core game mechanics implemented (BANG, Missed, Equipment, etc.)
+- Need browser verification that everything works end-to-end
+- Tests can pass while browser behavior differs (framework integration)
+
+**Action Required:**
+1. Test BANG! card with target selection in browser
+2. Test Missed! response to BANG! attacks
+3. Verify Equipment properly equips and shows in play area
+4. Verify Weapon changes attack range (distance calculations)
+5. Verify Barrel can be used to dodge BANG!
+6. Document findings in `.docs/BROWSER_TEST_REPORT.md`
+7. Create branch: `agent-3/test/browser-qa`
+8. File issues for any bugs discovered
+
+**Testing Checklist:**
+- [ ] Start local game with 4 players
+- [ ] Player can draw cards
+- [ ] Player can play BANG! and select target
+- [ ] Target player can respond with Missed!
+- [ ] Equipment cards show in play area when equipped
+- [ ] Weapon equipment changes attack range display
+- [ ] Barrel triggers dodge prompt when attacked
+- [ ] Character abilities work as expected
+- [ ] Turn order progresses correctly
+- [ ] Game ends with winner announcement
+
+**Follow-up Tasks (After Browser Testing):**
+- Test all 16 character abilities in browser
+- Test advanced card interactions (Indians, Gatling, Duel, etc.)
+- Performance testing with multiple concurrent games
+
+---
+
 ### **Agent 4 - Next Task: TEST NETWORK MULTIPLAYER** 🟡 MEDIUM PRIORITY
 **Assigned Task:** Verify network multiplayer functionality
 
@@ -115,12 +153,13 @@
 
 ## High Priority
 
-### 🎮 Gameplay Testing (Browser Required)
-- [ ] **Test BANG! card works** with target selection - Needs browser testing
-- [ ] **Test Missed! response** to BANG! attacks - Needs browser testing
+### 🎮 Gameplay Testing (Browser Required) - AGENT 3 ASSIGNED 🟢
+- [ ] **Test BANG! card works** with target selection - Browser QA testing
+- [ ] **Test Missed! response** to BANG! attacks - Browser QA testing
 - [ ] Verify: Equipment properly equips and shows in play area
 - [ ] Verify: Weapon changes attack range
 - [ ] Verify: Barrel can be used to dodge BANG!
+- **See Agent 3 task assignment above for complete testing checklist**
 
 ### 🎨 UI/UX Improvements
 - [x] **Turn timer/waiting indicator** ✅ - Shows whose turn it is, waiting status, pending actions (commit 1f313ca)
