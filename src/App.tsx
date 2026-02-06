@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Client } from 'boardgame.io/react';
 import { SocketIO } from 'boardgame.io/multiplayer';
 import { Local } from 'boardgame.io/multiplayer';
+import { MCTSBot } from 'boardgame.io/ai';
 import { BangGame } from './Game';
 import { GameBoard } from './components/GameBoard';
 import { ModeSelection } from './components/ModeSelection';
@@ -63,7 +64,7 @@ function App() {
         // Local single player with AI bots
         const bots: any = {};
         for (let i = 1; i < numPlayers; i++) {
-          bots[String(i)] = true; // Use built-in bot (calls game.ai.enumerate)
+          bots[String(i)] = MCTSBot; // Use MCTS bot (calls game.ai.enumerate)
         }
 
         client = Client({
