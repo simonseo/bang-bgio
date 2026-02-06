@@ -14,7 +14,9 @@ export const phases = {
       },
     },
     moves: {
-      selectCharacter,
+      selectCharacter: (G: BangGameState, ctx: any, characterId: string) => {
+        return selectCharacter({ G, ctx, events: ctx.events }, characterId);
+      },
     },
     endIf: ({ G }: { G: BangGameState }) => {
       // End phase when all players have selected their characters

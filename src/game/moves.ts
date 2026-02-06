@@ -1150,7 +1150,7 @@ export function discardCards({ G, ctx, events }: { G: BangGameState; ctx: GameCt
 /**
  * Select character from choices at game start
  */
-export function selectCharacter({ G, ctx }: { G: BangGameState; ctx: GameCtx }, characterId: string) {
+export function selectCharacter({ G, ctx, events }: { G: BangGameState; ctx: GameCtx; events: any }, characterId: string) {
   const playerId = ctx.currentPlayer || ctx.playerID;
   if (!playerId) {
     return INVALID_MOVE;
@@ -1191,6 +1191,11 @@ export function selectCharacter({ G, ctx }: { G: BangGameState; ctx: GameCtx }, 
         }
       }
     }
+  }
+
+  // End turn to advance to next player
+  if (events && events.endTurn) {
+    events.endTurn();
   }
 }
 
