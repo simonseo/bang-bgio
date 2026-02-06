@@ -9,7 +9,13 @@
       "Bash(git push:*)",
       "Bash(git checkout:*)",
       "Bash(git commit:*)",
-      "Bash(git merge:*)"
+      "Bash(git merge:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(timeout 5 node:*)",
+      "Bash(gtimeout:*)",
+      "Bash(npm install:*)",
+      "Bash(git pull:*)",
+      "WebFetch(domain:api.github.com)"
     ]
   }
 }
