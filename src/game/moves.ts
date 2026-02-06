@@ -48,17 +48,20 @@ export function standardDraw({ G, ctx }: { G: BangGameState; ctx: any }) {
 
   console.log('[standardDraw] Drawing 2 cards...');
 
+  // Set flag BEFORE checking for special abilities to prevent infinite loops
+  player.hasDrawn = true;
+
   // Check for character abilities
   const abilityResult = triggerAbility(G, ctx, playerId, 'onDrawPhase');
 
   if (abilityResult?.useSpecialDraw) {
     // Kit Carlson or Black Jack - handled separately
+    // NOTE: hasDrawn is already set above, so bot won't loop
     return;
   }
 
   // Standard draw 2 cards
   drawCards(G, playerId, 2);
-  player.hasDrawn = true;
 
   console.log('[standardDraw] Complete', {
     playerId,
