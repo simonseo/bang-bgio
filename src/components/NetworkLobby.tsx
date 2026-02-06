@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { LobbyClient } from 'boardgame.io/client';
+import { getLocalIP } from '../utils/getLocalIP';
 
 interface NetworkLobbyProps {
   mode: 'host' | 'join';
@@ -23,15 +24,18 @@ export const NetworkLobby: React.FC<NetworkLobbyProps> = ({ mode, onStartGame, o
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Get local IP for sharing
-  const [localIP, setLocalIP] = useState('');
+  // Get local network IP for LAN play
+  const [localIP, setLocalIP] = useState('Detecting...');
 
   useEffect(() => {
-    // Try to get local IP (this is approximate)
-    fetch('https://api.ipify.org?format=json')
-      .then(r => r.json())
-      .then(data => setLocalIP(data.ip))
-      .catch(() => setLocalIP('your-ip'));
+    // Get local network IP address using WebRTC
+    getLocalIP()
+      .then(ip => {
+        setLocalIP(ip);
+      })
+      .catch(() => {
+        setLocalIP('localhost');
+      });
   }, []);
 
   const initLobby = () => {

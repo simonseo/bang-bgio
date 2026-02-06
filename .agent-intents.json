@@ -42,6 +42,18 @@
       "branch": "agent-1/feature/death-rewards",
       "description": "Implement death reward system - draw cards when killing outlaws/renegades",
       "timestamp": "2026-02-05T22:14:11Z"
+    },
+    {
+      "agent": "agent-1",
+      "branch": "agent-1/feature/character-selection-fix",
+      "description": "Fix character selection phase - hide Draw button in characterSelection phase and implement full character selection UI",
+      "timestamp": "2026-02-06T01:37:31Z"
+    },
+    {
+      "agent": "agent-4",
+      "branch": "agent-4/fix/ip-detection",
+      "description": "Fix IP detection to show local network IP instead of public IP for LAN play",
+      "timestamp": "2026-02-06T01:37:58Z"
     }
   ]
 }
