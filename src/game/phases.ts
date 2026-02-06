@@ -2,7 +2,7 @@
 
 import { BangGameState } from './setup';
 import { validateGameState, validatePlayer } from './utils/stateValidation';
-import { selectCharacter, moves } from './moves';
+import { moves, INVALID_MOVE, drawCards, selectCharacter } from './moves';
 
 export const phases = {
   characterSelection: {
@@ -14,10 +14,7 @@ export const phases = {
       },
     },
     moves: {
-      selectCharacter: (G: BangGameState, ctx: any, characterId: string) => {
-        const { selectCharacter: selectCharacterMove } = require('./moves');
-        return selectCharacterMove({ G, ctx, events: ctx.events }, characterId);
-      },
+      selectCharacter,
     },
     endIf: ({ G }: { G: BangGameState }) => {
       // End phase when all players have selected their characters
