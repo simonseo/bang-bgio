@@ -95,29 +95,29 @@
 
 ---
 
-### **Agent 4 - COMPLETED: TEST NETWORK MULTIPLAYER** ✅
-**Status:** COMPLETE - Comprehensive test report created
+### **Agent 4 - Infrastructure & Tooling** 🔧
 
-**Completed Actions:**
-1. ✅ Tested network multiplayer setup
+**Recently Completed:**
+1. ✅ Tested network multiplayer setup - Comprehensive test report created
 2. ✅ Verified server functionality with various ports
 3. ✅ Tested API endpoints (/games returns ["bang"])
-4. ✅ Reviewed NetworkLobby UI (excellent!)
-5. ✅ Created comprehensive test report (`.docs/NETWORK_MULTIPLAYER_TEST_REPORT.md`)
-6. ✅ Identified 10 issues and provided prioritized recommendations
-7. ✅ Updated TODO.md with detailed findings
+4. ✅ Created comprehensive test report (`.docs/NETWORK_MULTIPLAYER_TEST_REPORT.md`)
+5. ✅ Identified 10 issues and provided prioritized recommendations
+6. ✅ Fixed server port conflict - Auto port finding utility (merged to main)
+7. ✅ Set up CI/CD pipeline - 4 GitHub Actions workflows (merged to main)
+8. ✅ **Fixed IP detection** - WebRTC-based local network IP detection (branch: agent-4/fix/ip-detection)
 
-**Key Findings:**
-- 🟡 Overall Status: FUNCTIONAL but INCOMPLETE
-- ✅ Core functionality works
-- ⚠️ Several improvements needed (see report)
-- Estimated effort to production-ready: 20-35 days
+**IP Detection Implementation:**
+- Created `src/utils/getLocalIP.ts` with WebRTC RTCPeerConnection technique
+- Filters for local network IPs (192.168.x.x, 10.x.x.x, 172.16-31.x.x)
+- Skips loopback and public IPs
+- 8/8 unit tests passing
+- Ready for review and merge
 
 **Next Priority Tasks for Agent 4:**
-1. 🔴 HIGH: Fix IP detection (shows wrong IP for LAN play)
-2. 🟡 MEDIUM: Add match browser UI
-3. 🟡 MEDIUM: Implement lobby waiting room with real-time updates
-4. 🟡 MEDIUM: Display player names in game
+1. 🟡 MEDIUM: Add match browser UI (list and join available games)
+2. 🟡 MEDIUM: Implement lobby waiting room with real-time updates
+3. 🟡 MEDIUM: Display player names in game
 
 ---
 
@@ -223,8 +223,8 @@
   - ✅ NetworkLobby UI excellent
   - ✅ API endpoints functional
   - ⚠️ Issues identified (see report for details)
-- [ ] **Fix server port conflict** 🔴 HIGH - Server crashes on EADDRINUSE (fix available in `agent-4/feature/server-and-cicd` PR - needs merge)
-- [ ] **Fix IP detection** 🟡 MEDIUM - Shows public IP instead of local IP for LAN play
+- [x] **Fix server port conflict** ✅ - Auto port finding utility merged to main (merged via agent-4/feature/server-and-cicd)
+- [x] **Fix IP detection** ✅ - WebRTC-based local IP detection (branch: agent-4/fix/ip-detection - ready for review)
 - [ ] **Add match browser** 🟡 MEDIUM - List and join available games
 - [ ] **Implement lobby waiting room** 🟡 MEDIUM - Real-time player list, ready status
 - [ ] **Display player names in game** 🟡 MEDIUM - Essential for multiplayer identity
