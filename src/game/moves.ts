@@ -1151,15 +1151,24 @@ export function discardCards({ G, ctx, events }: { G: BangGameState; ctx: GameCt
  * Select character from choices at game start
  */
 export function selectCharacter({ G, ctx, events }: { G: BangGameState; ctx: GameCtx; events: any }, characterId: string) {
+  console.log('[selectCharacter] Called', { characterId, currentPlayer: ctx.currentPlayer, playerID: ctx.playerID });
+
   const playerId = ctx.currentPlayer || ctx.playerID;
   if (!playerId) {
+    console.log('[selectCharacter] INVALID: no playerId');
     return INVALID_MOVE;
   }
   const player = G.players[playerId];
 
   // Validate character is in player's choices
+  console.log('[selectCharacter] Player choices', {
+    playerId,
+    choices: player.characterChoices?.map(c => c.id),
+    requestedId: characterId
+  });
   const selectedCharacter = player.characterChoices.find(c => c.id === characterId);
   if (!selectedCharacter) {
+    console.log('[selectCharacter] INVALID: character not in choices');
     return INVALID_MOVE;
   }
 
