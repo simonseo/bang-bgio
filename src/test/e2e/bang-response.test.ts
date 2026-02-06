@@ -8,6 +8,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { playBang, playMissed, takeDamage } from '../../game/moves';
 import { setup } from '../../game/setup';
 import { BangGameState } from '../../game/setup';
+import { CHARACTERS } from '../../data/characters';
 
 describe('BANG Response Flow E2E', () => {
   let G: BangGameState;
@@ -170,6 +171,12 @@ describe('BANG Response Flow E2E', () => {
     });
 
     it('should allow unlimited BANGs with Volcanic weapon', () => {
+      // IMPORTANT: Set neutral characters to avoid distance modifiers
+      // Random character assignment can affect range (Paul Regret, Rose Doolan)
+      const neutralChar = CHARACTERS.find(c => c.id === 'bart-cassidy')!;
+      G.players['0'].character = neutralChar;
+      G.players['1'].character = neutralChar;
+
       // Add Volcanic weapon
       G.cardMap['volcanic-1'] = {
         id: 'volcanic-1',
@@ -184,8 +191,19 @@ describe('BANG Response Flow E2E', () => {
         range: 1,
       };
       G.players['0'].weapon = G.cardMap['volcanic-1'];
+      G.players['0'].inPlay.push('volcanic-1'); // Weapon must be in inPlay array
 
-      // Add second BANG
+      // Add BANG cards to cardMap (both need to exist!)
+      G.cardMap['bang-1'] = {
+        id: 'bang-1',
+        name: 'BANG!',
+        type: 'BANG',
+        suit: 'hearts',
+        rank: 'A',
+        category: 'brown',
+        description: 'BANG!',
+        requiresTarget: true,
+      };
       G.cardMap['bang-2'] = {
         id: 'bang-2',
         name: 'BANG!',

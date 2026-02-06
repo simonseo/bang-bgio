@@ -7,6 +7,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { playBang, equipCard, takeDamage, playWellsFargo, playStagecoach, playBeer, playGatling, playIndians, respondToIndians, playDuel, respondToDuel, playGeneralStore, respondToGeneralStore } from '../../game/moves';
 import { setup } from '../../game/setup';
 import { isCardPlayable } from '../../game/utils/playability';
+import { CHARACTERS } from '../../data/characters';
 
 describe('Move Function Signatures', () => {
   let G: any;
@@ -595,7 +596,14 @@ describe('BANG Limit Enforcement', () => {
   });
 
   it('should allow unlimited BANGs with Volcanic', () => {
-    // Give player Volcanic weapon (Card object)
+    // IMPORTANT: Set neutral characters to avoid distance modifiers (like distance-abilities fix)
+    // Random character assignment can cause Paul Regret (+1 distance) or Rose Doolan (-1 distance)
+    // which affects target validation randomly
+    const neutralChar = CHARACTERS.find(c => c.id === 'bart-cassidy')!;
+    G.players['0'].character = neutralChar;
+    G.players['1'].character = neutralChar;
+
+    // Give player 0 Volcanic weapon
     G.cardMap['volcanic-1'] = {
       id: 'volcanic-1',
       name: 'Volcanic',
@@ -610,8 +618,9 @@ describe('BANG Limit Enforcement', () => {
     };
 
     G.players['0'].weapon = G.cardMap['volcanic-1'];
+    G.players['0'].inPlay.push('volcanic-1'); // Weapon must be in inPlay array
 
-    // Play first BANG
+    // Play first BANG (bang-1 already in hand from beforeEach)
     playBang({ G, ctx }, 'bang-1', '1');
     expect(G.players['0'].bangsPlayedThisTurn).toBe(1);
 
