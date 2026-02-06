@@ -27,12 +27,86 @@ export const BangGame = {
   ai: {
     enumerate: (G: BangGameState, ctx: any) => {
       const moves = [];
+      const playerId = ctx.currentPlayer;
+      const player = G.players[playerId];
+
+      // Check if player is in a stage (reactive moves required)
+      const playerStage = ctx.activePlayers?.[playerId];
+
+      // Handle stages (reactive responses)
+      if (playerStage === 'respondToBang') {
+        // Try to play Missed! card
+        const missedCard = player.hand.find(cardId => {
+          const card = G.cardMap[cardId];
+          return card && card.type === 'MISSED';
+        });
+
+        if (missedCard) {
+          moves.push({ move: 'playMissed', args: [missedCard] });
+        }
+
+        // Try Barrel if available
+        if (player.barrel) {
+          moves.push({ move: 'useBarrel', args: [] });
+        }
+
+        // Always allow taking damage as fallback
+        moves.push({ move: 'takeDamage', args: [1] });
+        return moves;
+      }
+
+      if (playerStage === 'respondToIndians') {
+        // Try to play BANG! card to avoid damage
+        const bangCard = player.hand.find(cardId => {
+          const card = G.cardMap[cardId];
+          return card && card.type === 'BANG';
+        });
+
+        if (bangCard) {
+          moves.push({ move: 'respondToIndians', args: [bangCard] });
+        } else {
+          // No BANG!, take damage
+          moves.push({ move: 'respondToIndians', args: [] });
+        }
+        return moves;
+      }
+
+      if (playerStage === 'respondToDuel') {
+        // Try to play BANG! card
+        const bangCard = player.hand.find(cardId => {
+          const card = G.cardMap[cardId];
+          return card && card.type === 'BANG';
+        });
+
+        if (bangCard) {
+          moves.push({ move: 'respondToDuel', args: [bangCard] });
+        } else {
+          // No BANG!, pass (take damage)
+          moves.push({ move: 'respondToDuel', args: [] });
+        }
+        return moves;
+      }
+
+      if (playerStage === 'respondToGeneralStore') {
+        // Pick first available card
+        if (G.pendingAction?.revealedCards && G.pendingAction.revealedCards.length > 0) {
+          moves.push({ move: 'respondToGeneralStore', args: [G.pendingAction.revealedCards[0]] });
+        }
+        return moves;
+      }
+
+      if (playerStage === 'discard') {
+        // Discard random cards until hand size <= health
+        const cardsToDiscard = player.hand.slice(0, player.hand.length - player.health);
+        if (cardsToDiscard.length > 0) {
+          moves.push({ move: 'discardCards', args: [cardsToDiscard] });
+        }
+        return moves;
+      }
 
       // Character selection phase
       if (ctx.phase === 'characterSelection') {
-        const player = G.players[ctx.currentPlayer];
         if (!player.hasSelectedCharacter && player.characterChoices && player.characterChoices.length > 0) {
-          // AI selects first character
           moves.push({
             move: 'selectCharacter',
             args: [player.characterChoices[0].id]
@@ -40,50 +114,43 @@ export const BangGame = {
         }
       }
 
-      // Play phase
-      if (ctx.phase === 'play') {
-        const player = G.players[ctx.currentPlayer];
-
+      // Play phase (normal turn)
+      if (ctx.phase === 'play' && !playerStage) {
         // Must draw cards first
         if (!player.hasDrawn) {
           moves.push({
             move: 'standardDraw',
             args: []
           });
-          return moves; // Only return draw move if not drawn yet
+          return moves;
         }
 
-        // After drawing, enumerate playable cards
-        // Simple bot logic: Try to play BANG! if available and not at limit
+        // After drawing, try to play BANG! if available
         const hasUnlimitedBangs = player.weapon?.type === 'VOLCANIC' || player.character?.id === 'willy-the-kid';
         const canPlayBang = hasUnlimitedBangs || player.bangsPlayedThisTurn < 1;
 
         if (canPlayBang) {
-          // Find BANG! cards in hand
           const bangCard = player.hand.find(cardId => {
             const card = G.cardMap[cardId];
             return card && card.type === 'BANG';
           });
 
           if (bangCard) {
-            // Find valid targets (alive players within range)
             const alivePlayers = Object.keys(G.players).filter(id =>
-              id !== ctx.currentPlayer && !G.players[id].isDead
+              id !== playerId && !G.players[id].isDead
             );
 
             if (alivePlayers.length > 0) {
-              // Simple strategy: target first alive player
-              const target = alivePlayers[0];
               moves.push({
                 move: 'playBang',
-                args: [bangCard, target]
+                args: [bangCard, alivePlayers[0]]
               });
               return moves;
             }
           }
         }
 
-        // If can't play BANG!, just pass turn
+        // If can't play BANG!, pass turn
         moves.push({
           move: 'passTurn',
           args: []
