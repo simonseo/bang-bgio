@@ -152,8 +152,8 @@
 - [x] **Review agent-3/feature/new-work branch** ✅ - Branch doesn't exist, no work to review
 - [x] **Fix gameFlow integration test** ✅ - Updated to test character selection phase (commit fd2ef14)
 - [x] **Fix flaky distance-abilities tests** ✅ - Fixed by agent-1/fix/flaky-tests (merged to main)
-- [x] **Fix flaky Volcanic weapon tests** ✅ - Fixed by agent-1/fix/flaky-volcanic-test (merged to main)
-- [x] **Fix AI character selection bug** ✅ - AI players now auto-select characters (branch: agent-1/fix/ai-character-selection, ready for testing)
+- [x] **Fix flaky Volcanic weapon tests** ✅ - Fixed by agent-1/fix/flaky-volcanic-test (merged to main, 100% stable)
+- [x] **Fix character selection phase bug** ✅ - COMPLETE: UI added + AI logic added + moves enabled (branch: agent-1/fix/ai-character-selection)
 
 ## High Priority
 

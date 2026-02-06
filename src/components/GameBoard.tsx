@@ -282,6 +282,77 @@ export const GameBoard: React.FC<GameBoardProps> = ({ G, ctx, moves, playerID })
     moves.passTurn();
   };
 
+  const handleCharacterSelect = (characterId: string) => {
+    console.log('[Character Select] Player', playerID, 'selecting character:', characterId);
+    moves.selectCharacter(characterId);
+  };
+
+  // CHARACTER SELECTION PHASE UI
+  if (ctx.phase === 'characterSelection') {
+    const player = G.players[playerID || '0'];
+    const hasSelected = player.hasSelectedCharacter;
+    const characterChoices = player.characterChoices || [];
+
+    return (
+      <div className="w-full h-screen bg-gradient-to-br from-amber-900 to-red-900 flex flex-col items-center justify-center p-4">
+        <div className="max-w-4xl w-full">
+          <h1 className="text-white text-4xl font-bold text-center mb-2">Bang! Card Game</h1>
+          <h2 className="text-amber-200 text-2xl font-bold text-center mb-8">Character Selection</h2>
+
+          {hasSelected ? (
+            <div className="bg-green-900/50 border-4 border-green-500 rounded-xl p-8 text-center">
+              <div className="text-6xl mb-4">✅</div>
+              <h3 className="text-white text-2xl font-bold mb-2">Character Selected!</h3>
+              <p className="text-green-200 text-lg mb-4">
+                You chose: <span className="font-bold">{player.character.name}</span>
+              </p>
+              <p className="text-amber-200 text-sm italic">{player.character.description}</p>
+              <p className="text-white mt-6 animate-pulse">Waiting for other players to select their characters...</p>
+            </div>
+          ) : (
+            <>
+              <div className="bg-white/10 border-2 border-white/30 rounded-xl p-6 mb-6 text-center">
+                <p className="text-white text-lg mb-2">
+                  Choose your character for this game:
+                </p>
+                <p className="text-amber-200 text-sm">
+                  Each character has unique abilities that can help you win!
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {characterChoices.map((character: any) => (
+                  <button
+                    key={character.id}
+                    onClick={() => handleCharacterSelect(character.id)}
+                    className="bg-gradient-to-br from-amber-800 to-red-800 hover:from-amber-700 hover:to-red-700 border-4 border-amber-600 hover:border-yellow-400 rounded-xl p-6 transition-all duration-200 transform hover:scale-105 hover:shadow-2xl hover:shadow-yellow-500/50"
+                  >
+                    <div className="text-center">
+                      <h3 className="text-white text-3xl font-bold mb-2">{character.name}</h3>
+                      <div className="flex justify-center items-center gap-4 mb-4">
+                        <div className="text-red-400 text-xl">
+                          ❤️ Health: {character.health}
+                        </div>
+                      </div>
+                      <div className="bg-black/30 rounded-lg p-4 mb-4">
+                        <div className="text-yellow-400 text-sm font-bold mb-2">Special Ability:</div>
+                        <p className="text-white text-base italic">{character.description}</p>
+                      </div>
+                      <div className="text-green-400 font-bold text-lg">
+                        Click to Choose →
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // MAIN GAME UI (play phase)
   return (
     <div className="w-full h-screen bg-gradient-to-b from-amber-900 to-amber-950 flex flex-col">
       {/* Error Toast */}
@@ -460,8 +531,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({ G, ctx, moves, playerID })
             </div>
           </div>
 
-          {/* Action buttons */}
-          {isMyTurn && (
+          {/* Action buttons - Only show in play phase */}
+          {isMyTurn && ctx.phase === 'play' && (
             <div className="flex gap-4">
               <button
                 onClick={handleDraw}
@@ -476,6 +547,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({ G, ctx, moves, playerID })
               >
                 End Turn
               </button>
+            </div>
+          )}
+
+          {/* Character Selection Phase Message */}
+          {isMyTurn && ctx.phase === 'characterSelection' && (
+            <div className="bg-yellow-900/50 border-2 border-yellow-500 rounded-lg p-4 text-center">
+              <p className="text-yellow-200 font-bold">Character Selection Phase</p>
+              <p className="text-white text-sm">Select your character to continue</p>
             </div>
           )}
       </div>
