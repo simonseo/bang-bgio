@@ -2,7 +2,7 @@
 
 import { BangGameState } from './setup';
 import { validateGameState, validatePlayer } from './utils/stateValidation';
-import { selectCharacter } from './moves';
+import { selectCharacter, moves } from './moves';
 
 export const phases = {
   characterSelection: {
@@ -27,6 +27,7 @@ export const phases = {
   },
   play: {
     start: false,
+    moves: moves, // Make all moves available during play phase
     turn: {
       order: {
         first: ({ G }: { G: BangGameState }) => {

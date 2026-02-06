@@ -152,7 +152,8 @@
 - [x] **Review agent-3/feature/new-work branch** ✅ - Branch doesn't exist, no work to review
 - [x] **Fix gameFlow integration test** ✅ - Updated to test character selection phase (commit fd2ef14)
 - [x] **Fix flaky distance-abilities tests** ✅ - Fixed by agent-1/fix/flaky-tests (merged to main)
-- [ ] **Fix flaky Volcanic weapon tests** 🔴 - NEW ISSUE: 40% failure rate, blocks death-rewards merge (AGENT 1 ASSIGNED)
+- [x] **Fix flaky Volcanic weapon tests** ✅ - Fixed by agent-1/fix/flaky-volcanic-test (merged to main, 100% stable)
+- [x] **Fix character selection phase bug** ✅ - COMPLETE: UI added + AI logic added + moves enabled (branch: agent-1/fix/ai-character-selection)
 
 ## High Priority
 
