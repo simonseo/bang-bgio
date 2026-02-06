@@ -22,4 +22,34 @@ export const BangGame = {
 
   minPlayers: 4,
   maxPlayers: 7,
+
+  // AI/Bot configuration
+  ai: {
+    enumerate: (G: BangGameState, ctx: any) => {
+      const moves = [];
+
+      // Character selection phase
+      if (ctx.phase === 'characterSelection') {
+        const player = G.players[ctx.currentPlayer];
+        if (!player.hasSelectedCharacter && player.characterChoices && player.characterChoices.length > 0) {
+          // AI selects first character
+          moves.push({
+            move: 'selectCharacter',
+            args: [player.characterChoices[0].id]
+          });
+        }
+      }
+
+      // Play phase - use existing AI logic
+      if (ctx.phase === 'play') {
+        // For now, just pass turn (we can enhance this later)
+        moves.push({
+          move: 'passTurn',
+          args: []
+        });
+      }
+
+      return moves;
+    }
+  }
 };

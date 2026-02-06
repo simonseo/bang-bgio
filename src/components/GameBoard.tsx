@@ -5,7 +5,6 @@ import { BangGameState } from '../game/setup';
 import { Card as CardComponent } from './Card';
 import { HealthDisplay } from './HealthDisplay';
 import { RoleBadge } from './RoleBadge';
-import { AIManager } from './AIManager';
 import { HelpPanel } from './HelpPanel';
 import { TurnIndicator } from './TurnIndicator';
 import { ActionNotification } from './ActionNotification';
@@ -295,8 +294,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ G, ctx, moves, playerID })
 
     return (
       <>
-        {/* AI Manager - must be rendered even in character selection phase! */}
-        <AIManager G={G} ctx={ctx} moves={moves} playerID={playerID} />
+        {/* AI is now handled by boardgame.io's bot system */}
 
         <div className="w-full h-screen bg-gradient-to-br from-amber-900 to-red-900 flex flex-col items-center justify-center p-4">
         <div className="max-w-4xl w-full">
@@ -390,8 +388,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ G, ctx, moves, playerID })
       {/* Help Panel */}
       <HelpPanel />
 
-      {/* AI Manager - automatically plays for AI players */}
-      <AIManager G={G} ctx={ctx} moves={moves} playerID={playerID} />
+      {/* AI is now handled by boardgame.io's bot system */}
 
       {/* Action Notifications - Show opponent actions */}
       <ActionNotification G={G} ctx={ctx} playerID={playerID} />
