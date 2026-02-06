@@ -294,7 +294,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({ G, ctx, moves, playerID })
     const characterChoices = player.characterChoices || [];
 
     return (
-      <div className="w-full h-screen bg-gradient-to-br from-amber-900 to-red-900 flex flex-col items-center justify-center p-4">
+      <>
+        {/* AI Manager - must be rendered even in character selection phase! */}
+        <AIManager G={G} ctx={ctx} moves={moves} playerID={playerID} />
+
+        <div className="w-full h-screen bg-gradient-to-br from-amber-900 to-red-900 flex flex-col items-center justify-center p-4">
         <div className="max-w-4xl w-full">
           <h1 className="text-white text-4xl font-bold text-center mb-2">Bang! Card Game</h1>
           <h2 className="text-amber-200 text-2xl font-bold text-center mb-8">Character Selection</h2>
@@ -349,6 +353,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({ G, ctx, moves, playerID })
           )}
         </div>
       </div>
+      </>
     );
   }
 
